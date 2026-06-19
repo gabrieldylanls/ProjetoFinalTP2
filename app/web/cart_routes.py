@@ -7,7 +7,7 @@ from app.web.serializers import serialize_product
 
 
 def create_cart_blueprint(cart_service: CartService) -> Blueprint:
-    """US04: cria as rotas de carrinho com o serviço injetado.
+    """US04/US05: cria as rotas de carrinho com o serviço injetado.
 
     Pré-condição: cart_service deve implementar as operações do carrinho.
     Pós-condição: retorna uma blueprint com as rotas /cart.
@@ -28,6 +28,18 @@ def create_cart_blueprint(cart_service: CartService) -> Blueprint:
                 for product, quantity in cart_service.get_items(cart)
             ]
         ), 200
+
+    @blueprint.get("/cart/total")
+    def get_cart_total():
+        """US05: retorna o total estimado do carrinho atual.
+
+        Pré-condição: os itens da sessão devem referenciar produtos válidos.
+        Pós-condição: retorna a soma estimada em JSON com HTTP 200.
+        """
+        cart = session.get("cart", {})
+        items = cart_service.get_items(cart)
+        total = cart_service.calculate_total(items)
+        return jsonify({"total": total}), 200
 
     @blueprint.post("/cart/items")
     def add_cart_item():

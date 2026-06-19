@@ -1,12 +1,14 @@
 """Casos de uso relacionados ao carrinho em sessão."""
 
+import math
+
 from app.application.product_service import ProductService
 from app.domain.exceptions import CartItemNotFoundError, InvalidCartError
 from app.domain.product import Product
 
 
 class CartService:
-    """US04: gerencia itens do carrinho sem persistência própria."""
+    """US04/US05: gerencia itens e total do carrinho em sessão."""
 
     def __init__(self, product_service: ProductService) -> None:
         """Inicializa o serviço de carrinho.
@@ -76,6 +78,28 @@ class CartService:
             product, _ = self.product_service.get_product(bar_code)
             items.append((product, quantity))
         return items
+
+    @staticmethod
+    def calculate_total(items: list[tuple[Product, int]]) -> int | float:
+        """US05: calcula o total estimado dos itens do carrinho.
+
+        Pré-condição: cada item deve possuir preço válido e quantidade.
+        Pós-condição: retorna a soma de preço vezes quantidade.
+        """
+        total = 0
+        for product, quantity in items:
+            price = product.price
+            if (
+                isinstance(price, bool)
+                or not isinstance(price, (int, float))
+                or not math.isfinite(price)
+                or price < 0
+            ):
+                raise InvalidCartError(
+                    "O preço do item do carrinho é inválido."
+                )
+            total += price * quantity
+        return total
 
     @staticmethod
     def _validate_quantity(quantity: int) -> None:

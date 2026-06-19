@@ -33,7 +33,7 @@ from app.web.shopping_list_routes import create_shopping_list_blueprint
 
 
 def create_app(connection: sqlite3.Connection) -> Flask:
-    """AD01/US01/US02/US03/US04/AD02/AD03/RNF02: cria a aplicação.
+    """AD01/US01/US02/US03/US04/US05/AD02/AD03/RNF02: cria a aplicação.
 
     Pré-condição: connection deve ser uma conexão SQLite aberta.
     Pós-condição: retorna a aplicação com autenticação e autorização.
