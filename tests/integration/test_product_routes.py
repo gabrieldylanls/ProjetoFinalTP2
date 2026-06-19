@@ -248,3 +248,43 @@ class TestProductRoutes(unittest.TestCase):
             ("1234567890123",),
         ).fetchone()
         self.assertEqual(stored_product, ("Arroz", "Tio João", 25.90))
+
+    def test_ad02_deactivate_existing_product_route(self):
+        """AD02: DELETE deve desativar produto e retornar HTTP 204."""
+        self.client.post(
+            "/products",
+            json={
+                "name": "Arroz Integral",
+                "brand": "Tio João",
+                "price": 12.50,
+                "bar_code": "1234567890444",
+                "quantity": 8,
+            },
+        )
+
+        response = self.client.delete("/products/1234567890444")
+        search_response = self.client.get("/products?q=arroz")
+        stored_row = self.conn.execute(
+            """
+            SELECT active
+            FROM products
+            WHERE bar_code = ?;
+            """,
+            ("1234567890444",),
+        ).fetchone()
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data, b"")
+        self.assertEqual(search_response.status_code, 200)
+        self.assertEqual(search_response.get_json(), [])
+        self.assertEqual(stored_row, (0,))
+
+    def test_ad02_deactivate_missing_product_route(self):
+        """AD02: remoção de produto inexistente deve retornar HTTP 404."""
+        response = self.client.delete("/products/9999999999999")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(
+            response.get_json()["erro"],
+            "Produto com o código de barras 9999999999999 não encontrado.",
+        )

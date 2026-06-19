@@ -15,6 +15,7 @@ class FakeProductRepository:
 
     def __init__(self):
         self.products = {}
+        self.inactive_bar_codes = set()
         self.last_search_query = None
 
     def add_product(self, product, quantity):
@@ -25,11 +26,18 @@ class FakeProductRepository:
 
     def search_products_by_text(self, query):
         self.last_search_query = query
-        return list(self.products.values())
+        return [
+            stored_product
+            for bar_code, stored_product in self.products.items()
+            if bar_code not in self.inactive_bar_codes
+        ]
 
     def update_product(self, product):
         _, quantity = self.products[product.bar_code]
         self.products[product.bar_code] = (product, quantity)
+
+    def deactivate_product(self, bar_code):
+        self.inactive_bar_codes.add(bar_code)
 
 
 class TestProductService(unittest.TestCase):
@@ -194,3 +202,22 @@ class TestProductService(unittest.TestCase):
         self.assertEqual(stored_product.brand, "Marca de teste")
         self.assertEqual(stored_product.price, 10.0)
         self.assertEqual(quantity, 5)
+
+    def test_ad02_deactivate_existing_product(self):
+        """AD02: deve remover logicamente sem apagar o produto."""
+        self.service.deactivate_product(self.product.bar_code)
+
+        self.assertIn(self.product.bar_code, self.repository.products)
+        self.assertIn(
+            self.product.bar_code,
+            self.repository.inactive_bar_codes,
+        )
+        self.assertEqual(self.service.search_products("Produto"), [])
+
+    def test_ad02_reject_deactivation_for_missing_product(self):
+        """AD02: deve rejeitar remoção de produto inexistente."""
+        with self.assertRaisesRegex(
+            ProductNotFoundError,
+            "^Produto com o código de barras 9999999999999 não encontrado\\.$",
+        ):
+            self.service.deactivate_product("9999999999999")

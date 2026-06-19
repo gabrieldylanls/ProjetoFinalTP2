@@ -191,3 +191,78 @@ class TestSQLiteProductRepository(unittest.TestCase):
         self.assertEqual(stored_product.price, 15.75)
         self.assertEqual(stored_product.bar_code, original_product.bar_code)
         self.assertEqual(stored_quantity, 10)
+
+    def test_ad02_create_table_adds_active_column(self):
+        """AD02: tabela nova deve possuir active com valor padrão 1."""
+        columns = self.connection.execute(
+            "PRAGMA table_info(products);"
+        ).fetchall()
+        active_column = next(
+            column for column in columns if column[1] == "active"
+        )
+
+        self.assertEqual(active_column[3], 1)
+        self.assertEqual(active_column[4], "1")
+
+    def test_ad02_create_table_migrates_existing_database(self):
+        """AD02: banco antigo deve receber active preservando registros."""
+        connection = sqlite3.connect(":memory:")
+        self.addCleanup(connection.close)
+        connection.execute(
+            """
+            CREATE TABLE products (
+                bar_code TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                brand TEXT NOT NULL,
+                price REAL NOT NULL,
+                quantity INTEGER NOT NULL
+            );
+            """
+        )
+        connection.execute(
+            """
+            INSERT INTO products (bar_code, name, brand, price, quantity)
+            VALUES (?, ?, ?, ?, ?);
+            """,
+            ("1234567890777", "Produto antigo", "Marca antiga", 5.0, 2),
+        )
+        connection.commit()
+        repository = SQLiteProductRepository(connection)
+
+        repository.create_table()
+
+        active = connection.execute(
+            """
+            SELECT active
+            FROM products
+            WHERE bar_code = ?;
+            """,
+            ("1234567890777",),
+        ).fetchone()[0]
+        self.assertEqual(active, 1)
+
+    def test_ad02_deactivate_product_without_physical_delete(self):
+        """AD02: deve manter a linha inativa e ocultá-la da busca."""
+        product = Product(
+            name="Arroz Integral",
+            brand="Tio João",
+            price=12.50,
+            bar_code="1234567890444",
+        )
+        self.repository.add_product(product, quantity=8)
+
+        self.repository.deactivate_product(product.bar_code)
+
+        stored_row = self.connection.execute(
+            """
+            SELECT active
+            FROM products
+            WHERE bar_code = ?;
+            """,
+            (product.bar_code,),
+        ).fetchone()
+        self.assertEqual(stored_row, (0,))
+        self.assertEqual(
+            self.repository.search_products_by_text("arroz"),
+            [],
+        )
