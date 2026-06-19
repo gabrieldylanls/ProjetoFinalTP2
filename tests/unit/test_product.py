@@ -1,7 +1,7 @@
 import unittest
 
 from app.domain.product import Product
-from app.domain.exeptions import InvalidProductError
+from app.domain.exceptions import InvalidProductError
 
 class TestProduct(unittest.TestCase):
     def test_create_product(self):
@@ -64,3 +64,4 @@ class TestProduct(unittest.TestCase):
                 bar_code="1234567890123"
             )
             self.assertRaises(InvalidProductError)
+
