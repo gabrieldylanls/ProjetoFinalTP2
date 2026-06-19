@@ -5,13 +5,12 @@ import sqlite3
 from flask import Flask, jsonify
 from werkzeug.exceptions import BadRequest
 
-from app.application.product_service import ProductService
 from app.domain.exceptions import (
     DuplicateBarcodeError,
     InvalidProductError,
     InvalidQuantityError,
 )
-from app.infrastructure.product_repository import SQLiteProductRepository
+from app.web.dependencies import initialize_product_service
 from app.web.routes import create_product_blueprint
 
 
@@ -22,10 +21,7 @@ def create_app(connection: sqlite3.Connection) -> Flask:
     Pós-condição: retorna a aplicação com a rota POST /products configurada.
     """
     flask_app = Flask(__name__)
-
-    product_repository = SQLiteProductRepository(connection)
-    product_repository.create_table()
-    product_service = ProductService(product_repository)
+    product_service = initialize_product_service(connection)
 
     flask_app.register_blueprint(
         create_product_blueprint(product_service)
