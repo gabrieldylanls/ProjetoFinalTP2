@@ -2,7 +2,7 @@ import sqlite3
 import unittest
 
 from app.domain.product import Product
-from app.infrastructure.product_repository import SQLitePrductRepository
+from app.infrastructure.product_repository import SQLiteProductRepository
 
 class TestSQLiteProductRepository(unittest.TestCase):
     def setUp(self):
