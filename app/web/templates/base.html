@@ -20,6 +20,11 @@
       <a href="{{ url_for('html.products_page') }}">Produtos</a>
       <a href="{{ url_for('html.cart_page') }}">Carrinho</a>
       <a href="{{ url_for('html.new_product_page') }}">Cadastrar produto</a>
+      {% if session.get("user_id") %}
+        <span>Perfil: {{ session.get("role") }}</span>
+      {% else %}
+        <a href="{{ url_for('html.login_page') }}">Entrar</a>
+      {% endif %}
     </nav>
     <main>
       {% block content %}{% endblock %}

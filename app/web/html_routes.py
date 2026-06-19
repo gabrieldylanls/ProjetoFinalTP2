@@ -4,16 +4,19 @@ from flask import Blueprint, redirect, render_template, request, session, url_fo
 
 from app.application.cart_service import CartService
 from app.application.product_service import ProductService
+from app.application.user_service import UserService
+from app.domain.exceptions import InvalidCredentialsError
 from app.web.authorization import admin_required
 
 
 def create_html_blueprint(
     product_service: ProductService,
     cart_service: CartService,
+    user_service: UserService,
 ) -> Blueprint:
-    """WEB: cria páginas HTML reutilizando os serviços existentes.
+    """US01/WEB: cria páginas HTML reutilizando os serviços existentes.
 
-    Pré-condição: os serviços devem permitir catálogo, cadastro e carrinho.
+    Pré-condição: os serviços devem permitir autenticação, catálogo e carrinho.
     Pós-condição: retorna uma blueprint com as páginas do protótipo.
     """
     blueprint = Blueprint("html", __name__)
@@ -26,6 +29,29 @@ def create_html_blueprint(
         Pós-condição: retorna a página inicial com HTTP 200.
         """
         return render_template("home.html")
+
+    @blueprint.route("/login", methods=["GET", "POST"])
+    def login_page():
+        """US01/WEB: exibe e processa o formulário de login.
+
+        Pré-condição: no POST, e-mail e senha devem ser informados.
+        Pós-condição: cria a sessão e redireciona ou exibe erro com HTTP 401.
+        """
+        if request.method == "POST":
+            try:
+                user = user_service.authenticate_user(
+                    email=request.form["email"],
+                    password=request.form["password"],
+                )
+            except InvalidCredentialsError as error:
+                return render_template("login.html", error=str(error)), 401
+
+            session.clear()
+            session["user_id"] = user.user_id
+            session["role"] = user.role
+            return redirect(url_for("html.products_page"))
+
+        return render_template("login.html", error=None)
 
     @blueprint.get("/catalog")
     def products_page():

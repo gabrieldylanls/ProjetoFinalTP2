@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar | Gerência de Compras{% endblock %}
+
+{% block content %}
+  <h1>Entrar</h1>
+
+  {% if error %}
+    <p role="alert">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('html.login_page') }}">
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" autocomplete="email" required>
+
+    <label for="password">Senha</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      autocomplete="current-password"
+      required
+    >
+
+    <button type="submit">Entrar</button>
+  </form>
+{% endblock %}

@@ -57,9 +57,9 @@ class TestDEMODemoSeed(unittest.TestCase):
         product_count = self.connection.execute(
             "SELECT COUNT(*) FROM products;"
         ).fetchone()[0]
-        user_count = self.connection.execute(
-            "SELECT COUNT(*) FROM users;"
-        ).fetchone()[0]
+        user_count = self.connection.execute("SELECT COUNT(*) FROM users;").fetchone()[
+            0
+        ]
 
         self.assertGreater(first_result["products_created"], 0)
         self.assertEqual(first_result["users_created"], 2)

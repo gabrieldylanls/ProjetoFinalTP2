@@ -72,7 +72,9 @@ def create_app(connection: sqlite3.Connection) -> Flask:
     flask_app.register_blueprint(create_store_blueprint(store_service))
     flask_app.register_blueprint(create_product_price_blueprint(product_price_service))
     flask_app.register_blueprint(create_admin_metrics_blueprint(admin_metrics_service))
-    flask_app.register_blueprint(create_html_blueprint(product_service, cart_service))
+    flask_app.register_blueprint(
+        create_html_blueprint(product_service, cart_service, user_service)
+    )
     _register_error_handlers(flask_app)
 
     return flask_app

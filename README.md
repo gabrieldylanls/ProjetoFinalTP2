@@ -44,6 +44,31 @@ app = create_app(connection)
 app.run(debug=True)
 ```
 
+Para iniciar diretamente com o banco `shopping.db` populado:
+
+```bash
+make seed
+make run
+```
+
+Também é possível executar:
+
+```bash
+python -m app.infrastructure.demo_seed
+python run.py
+```
+
+Abra `http://127.0.0.1:5000/` no navegador. A tela de login fica em
+`http://127.0.0.1:5000/login`.
+
+Credenciais de demonstração:
+
+- Administrador: `admin@example.com` / `admin123`
+- Usuário comum: `usuario@example.com` / `usuario123`
+
+A população é idempotente: executá-la novamente não duplica usuários ou
+produtos fictícios.
+
 ## Testes
 
 A suíte permanece baseada exclusivamente em `unittest`:

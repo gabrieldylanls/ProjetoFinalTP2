@@ -2,7 +2,13 @@ PYTHON ?= python3
 TEST_PATTERN ?= test_*.py
 TEST_ENV ?= PYTHONDONTWRITEBYTECODE=1
 
-.PHONY: test test-unit test-integration coverage lint format quality
+.PHONY: run seed test test-unit test-integration coverage lint format quality
+
+run:
+	$(PYTHON) run.py
+
+seed:
+	$(PYTHON) -m app.infrastructure.demo_seed
 
 test:
 	$(TEST_ENV) $(PYTHON) -m unittest discover -s tests
