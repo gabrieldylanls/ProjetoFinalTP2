@@ -80,17 +80,11 @@ class Product:
         Pós-condição: o preço é atualizado ou InvalidProductError é lançada.
         """
         if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise InvalidProductError(
-                "O preço do produto deve ser um número."
-            )
+            raise InvalidProductError("O preço do produto deve ser um número.")
         if isinstance(value, float) and not math.isfinite(value):
-            raise InvalidProductError(
-                "O preço do produto deve ser finito."
-            )
+            raise InvalidProductError("O preço do produto deve ser finito.")
         if value < 0:
-            raise InvalidProductError(
-                "O preço do produto não pode ser negativo."
-            )
+            raise InvalidProductError("O preço do produto não pode ser negativo.")
         self._price = value
 
     @property
@@ -106,9 +100,7 @@ class Product:
         Pós-condição: o código é atualizado ou InvalidProductError é lançada.
         """
         if not isinstance(value, str):
-            raise InvalidProductError(
-                "O código de barras deve ser uma string."
-            )
+            raise InvalidProductError("O código de barras deve ser uma string.")
         if (
             len(value) != self.BAR_CODE_LENGTH
             or not value.isascii()
@@ -137,6 +129,5 @@ class Product:
             )
         if not value.strip():
             raise InvalidProductError(
-                f"{article} {field_label} do produto não pode estar "
-                f"{empty_adjective}."
+                f"{article} {field_label} do produto não pode estar {empty_adjective}."
             )

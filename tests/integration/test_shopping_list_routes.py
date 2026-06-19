@@ -185,9 +185,7 @@ class TestUS03ShoppingListRoutes(unittest.TestCase):
             },
         )
 
-        response = self.client.delete(
-            f"/shopping-lists/{list_id}/items/1234567890444"
-        )
+        response = self.client.delete(f"/shopping-lists/{list_id}/items/1234567890444")
 
         self.assertEqual(response.status_code, 204)
         stored_item = self.connection.execute(

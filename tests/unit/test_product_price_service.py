@@ -59,9 +59,7 @@ class FakeProductPriceRepository:
     def list_prices_by_product(self, product_bar_code):
         """US06: lista preços vinculados ao produto informado."""
         return [
-            price
-            for price in self.prices
-            if price.product_bar_code == product_bar_code
+            price for price in self.prices if price.product_bar_code == product_bar_code
         ]
 
 

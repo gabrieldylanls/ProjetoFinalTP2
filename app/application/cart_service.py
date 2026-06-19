@@ -95,23 +95,15 @@ class CartService:
                 or not math.isfinite(price)
                 or price < 0
             ):
-                raise InvalidCartError(
-                    "O preço do item do carrinho é inválido."
-                )
+                raise InvalidCartError("O preço do item do carrinho é inválido.")
             total += price * quantity
         return total
 
     @staticmethod
     def _validate_quantity(quantity: int) -> None:
         """US04: valida uma quantidade estritamente positiva."""
-        if (
-            isinstance(quantity, bool)
-            or not isinstance(quantity, int)
-            or quantity <= 0
-        ):
-            raise InvalidCartError(
-                "A quantidade do carrinho deve ser maior que zero."
-            )
+        if isinstance(quantity, bool) or not isinstance(quantity, int) or quantity <= 0:
+            raise InvalidCartError("A quantidade do carrinho deve ser maior que zero.")
 
     @staticmethod
     def _ensure_item_exists(
@@ -120,6 +112,4 @@ class CartService:
     ) -> None:
         """US04: garante que o item existe no carrinho."""
         if bar_code not in cart:
-            raise CartItemNotFoundError(
-                "Item não encontrado no carrinho."
-            )
+            raise CartItemNotFoundError("Item não encontrado no carrinho.")

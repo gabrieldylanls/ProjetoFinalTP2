@@ -44,9 +44,7 @@ class TestUS01SQLiteUserRepository(unittest.TestCase):
         self.assertEqual(stored_user.email, "maria@example.com")
         self.assertEqual(stored_user.role, "user")
         self.assertNotEqual(stored_password, "senha-segura")
-        self.assertTrue(
-            check_password_hash(stored_password, "senha-segura")
-        )
+        self.assertTrue(check_password_hash(stored_password, "senha-segura"))
 
     def test_us01_reject_duplicate_email(self):
         """US01: deve rejeitar e-mail duplicado no SQLite."""
@@ -70,7 +68,7 @@ class TestUS01SQLiteUserRepository(unittest.TestCase):
         ):
             self.repository.add_user(duplicate_user)
 
-        user_count = self.connection.execute(
-            "SELECT COUNT(*) FROM users;"
-        ).fetchone()[0]
+        user_count = self.connection.execute("SELECT COUNT(*) FROM users;").fetchone()[
+            0
+        ]
         self.assertEqual(user_count, 1)

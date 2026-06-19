@@ -36,9 +36,12 @@ class TestUS06SQLiteStoreRepository(unittest.TestCase):
         stores = self.repository.list_stores()
 
         self.assertIsInstance(first_store.store_id, int)
-        self.assertEqual([store.name for store in stores], [
-            "Mercado A",
-            "Supermercado B",
-        ])
+        self.assertEqual(
+            [store.name for store in stores],
+            [
+                "Mercado A",
+                "Supermercado B",
+            ],
+        )
         self.assertEqual(stores[0].address, "Rua Um, 10")
         self.assertEqual(stores[0].observation, "24 horas")

@@ -45,40 +45,30 @@ class User:
     def _validate_name(name: str) -> str:
         """US01: valida e normaliza o nome do usuário."""
         if not isinstance(name, str) or not name.strip():
-            raise InvalidUserError(
-                "O nome do usuário deve ser uma string não vazia."
-            )
+            raise InvalidUserError("O nome do usuário deve ser uma string não vazia.")
         return name.strip()
 
     @classmethod
     def _validate_email(cls, email: str) -> str:
         """US01: valida e normaliza o e-mail do usuário."""
         if not isinstance(email, str):
-            raise InvalidUserError(
-                "O e-mail do usuário deve ser uma string válida."
-            )
+            raise InvalidUserError("O e-mail do usuário deve ser uma string válida.")
 
         normalized_email = email.strip().lower()
         if not cls.EMAIL_PATTERN.fullmatch(normalized_email):
-            raise InvalidUserError(
-                "O e-mail do usuário deve ser uma string válida."
-            )
+            raise InvalidUserError("O e-mail do usuário deve ser uma string válida.")
         return normalized_email
 
     @staticmethod
     def _validate_password_hash(password_hash: str) -> str:
         """US01: valida que a credencial protegida foi informada."""
         if not isinstance(password_hash, str) or not password_hash:
-            raise InvalidUserError(
-                "O hash da senha do usuário não pode estar vazio."
-            )
+            raise InvalidUserError("O hash da senha do usuário não pode estar vazio.")
         return password_hash
 
     @classmethod
     def _validate_role(cls, role: str) -> str:
         """US01: valida o papel de acesso do usuário."""
         if role not in cls.VALID_ROLES:
-            raise InvalidUserError(
-                "O papel do usuário deve ser 'user' ou 'admin'."
-            )
+            raise InvalidUserError("O papel do usuário deve ser 'user' ou 'admin'.")
         return role

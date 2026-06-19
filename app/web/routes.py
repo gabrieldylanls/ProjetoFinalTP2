@@ -47,10 +47,7 @@ def create_product_blueprint(
         results = product_service.search_products(query)
 
         return jsonify(
-            [
-                serialize_product(product, quantity)
-                for product, quantity in results
-            ]
+            [serialize_product(product, quantity) for product, quantity in results]
         ), 200
 
     @blueprint.put("/products/<bar_code>")

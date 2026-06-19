@@ -38,9 +38,7 @@ class Store:
     def _validate_required_text(value: str, field_name: str) -> str:
         """US06: valida um campo textual obrigatório."""
         if not isinstance(value, str) or not value.strip():
-            raise InvalidStoreError(
-                f"O {field_name} do local não pode estar vazio."
-            )
+            raise InvalidStoreError(f"O {field_name} do local não pode estar vazio.")
         return value.strip()
 
     @staticmethod
@@ -49,8 +47,6 @@ class Store:
         if observation is None:
             return None
         if not isinstance(observation, str):
-            raise InvalidStoreError(
-                "A observação do local deve ser uma string."
-            )
+            raise InvalidStoreError("A observação do local deve ser uma string.")
         normalized = observation.strip()
         return normalized or None

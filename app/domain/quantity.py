@@ -14,6 +14,4 @@ def validate_quantity(quantity: object) -> None:
             "A quantidade do produto deve ser um número inteiro."
         )
     if quantity < 0:
-        raise InvalidQuantityError(
-            "A quantidade do produto não pode ser negativa."
-        )
+        raise InvalidQuantityError("A quantidade do produto não pode ser negativa.")

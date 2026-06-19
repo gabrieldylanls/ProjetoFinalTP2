@@ -54,17 +54,11 @@ class ProductPrice:
     def _validate_price(price: int | float) -> int | float:
         """US06: valida um preço observado não negativo e finito."""
         if isinstance(price, bool) or not isinstance(price, (int, float)):
-            raise InvalidProductPriceError(
-                "O preço observado deve ser um número."
-            )
+            raise InvalidProductPriceError("O preço observado deve ser um número.")
         if isinstance(price, float) and not math.isfinite(price):
-            raise InvalidProductPriceError(
-                "O preço observado deve ser finito."
-            )
+            raise InvalidProductPriceError("O preço observado deve ser finito.")
         if price < 0:
-            raise InvalidProductPriceError(
-                "O preço observado não pode ser negativo."
-            )
+            raise InvalidProductPriceError("O preço observado não pode ser negativo.")
         return price
 
     @staticmethod

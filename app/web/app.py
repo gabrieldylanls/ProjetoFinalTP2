@@ -65,24 +65,14 @@ def create_app(connection: sqlite3.Connection) -> Flask:
     )
     admin_metrics_service = initialize_admin_metrics_service(connection)
 
-    flask_app.register_blueprint(
-        create_product_blueprint(product_service)
-    )
+    flask_app.register_blueprint(create_product_blueprint(product_service))
     flask_app.register_blueprint(create_cart_blueprint(cart_service))
     flask_app.register_blueprint(create_auth_blueprint(user_service))
-    flask_app.register_blueprint(
-        create_shopping_list_blueprint(shopping_list_service)
-    )
+    flask_app.register_blueprint(create_shopping_list_blueprint(shopping_list_service))
     flask_app.register_blueprint(create_store_blueprint(store_service))
-    flask_app.register_blueprint(
-        create_product_price_blueprint(product_price_service)
-    )
-    flask_app.register_blueprint(
-        create_admin_metrics_blueprint(admin_metrics_service)
-    )
-    flask_app.register_blueprint(
-        create_html_blueprint(product_service, cart_service)
-    )
+    flask_app.register_blueprint(create_product_price_blueprint(product_price_service))
+    flask_app.register_blueprint(create_admin_metrics_blueprint(admin_metrics_service))
+    flask_app.register_blueprint(create_html_blueprint(product_service, cart_service))
     _register_error_handlers(flask_app)
 
     return flask_app
@@ -120,9 +110,7 @@ def _register_error_handlers(flask_app: Flask) -> None:
 
     @flask_app.errorhandler(BadRequest)
     def handle_bad_request(error):
-        return jsonify(
-            {"erro": "O corpo da requisição deve conter JSON válido."}
-        ), 400
+        return jsonify({"erro": "O corpo da requisição deve conter JSON válido."}), 400
 
     @flask_app.errorhandler(KeyError)
     def handle_missing_field(error):

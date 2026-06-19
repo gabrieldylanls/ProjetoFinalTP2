@@ -105,9 +105,7 @@ class ShoppingListService:
         list_id: int,
     ) -> ShoppingList:
         """US03: retorna a lista quando ela pertence ao usuário."""
-        shopping_list = (
-            self.shopping_list_repository.get_shopping_list_by_id(list_id)
-        )
+        shopping_list = self.shopping_list_repository.get_shopping_list_by_id(list_id)
         if shopping_list is None or shopping_list.user_id != user_id:
             raise ShoppingListNotFoundError(
                 f"Lista de compras {list_id} não encontrada."

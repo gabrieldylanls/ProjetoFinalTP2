@@ -56,9 +56,7 @@ def create_cart_blueprint(cart_service: CartService) -> Blueprint:
             quantity=data["quantity"],
         )
         session["cart"] = cart
-        return jsonify(
-            serialize_product(product, data["quantity"])
-        ), 201
+        return jsonify(serialize_product(product, data["quantity"])), 201
 
     @blueprint.patch("/cart/items/<bar_code>")
     def update_cart_item(bar_code):
@@ -75,9 +73,7 @@ def create_cart_blueprint(cart_service: CartService) -> Blueprint:
             quantity=data["quantity"],
         )
         session["cart"] = cart
-        return jsonify(
-            serialize_product(product, data["quantity"])
-        ), 200
+        return jsonify(serialize_product(product, data["quantity"])), 200
 
     @blueprint.delete("/cart/items/<bar_code>")
     def remove_cart_item(bar_code):

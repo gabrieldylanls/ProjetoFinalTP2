@@ -72,6 +72,4 @@ class UserService:
     def _validate_password(password: str) -> None:
         """US01: valida a senha recebida antes de gerar o hash."""
         if not isinstance(password, str) or not password:
-            raise InvalidUserError(
-                "A senha do usuário não pode estar vazia."
-            )
+            raise InvalidUserError("A senha do usuário não pode estar vazia.")

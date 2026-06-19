@@ -22,15 +22,20 @@ class TestQAQualityConfiguration(unittest.TestCase):
 
     def test_qa_declares_coverage_and_ruff_development_dependencies(self):
         """QA: dependências de desenvolvimento devem incluir coverage e ruff."""
-        development_dependencies = self.pyproject["project"][
-            "optional-dependencies"
-        ]["dev"]
+        development_dependencies = self.pyproject["project"]["optional-dependencies"][
+            "dev"
+        ]
 
         self.assertTrue(
-            any(dependency.startswith("coverage") for dependency in development_dependencies)
+            any(
+                dependency.startswith("coverage")
+                for dependency in development_dependencies
+            )
         )
         self.assertTrue(
-            any(dependency.startswith("ruff") for dependency in development_dependencies)
+            any(
+                dependency.startswith("ruff") for dependency in development_dependencies
+            )
         )
 
     def test_qa_requires_minimum_eighty_percent_coverage(self):

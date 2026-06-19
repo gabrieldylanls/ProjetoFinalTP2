@@ -199,9 +199,7 @@ class TestProductService(unittest.TestCase):
                 price=25.90,
             )
 
-        stored_product, quantity = self.repository.products[
-            self.product.bar_code
-        ]
+        stored_product, quantity = self.repository.products[self.product.bar_code]
         self.assertEqual(stored_product.name, "Produto de teste")
         self.assertEqual(stored_product.brand, "Marca de teste")
         self.assertEqual(stored_product.price, 10.0)

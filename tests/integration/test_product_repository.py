@@ -36,8 +36,8 @@ class TestSQLiteProductRepository(unittest.TestCase):
         product = self.create_product()
 
         self.repository.add_product(product, quantity=10)
-        stored_product, stored_quantity = (
-            self.repository.get_product_by_bar_code(product.bar_code)
+        stored_product, stored_quantity = self.repository.get_product_by_bar_code(
+            product.bar_code
         )
 
         self.assertEqual(stored_product.name, "Produto de teste")
@@ -57,9 +57,7 @@ class TestSQLiteProductRepository(unittest.TestCase):
         product = self.create_product()
 
         self.repository.add_product(product, quantity=0)
-        _, stored_quantity = self.repository.get_product_by_bar_code(
-            product.bar_code
-        )
+        _, stored_quantity = self.repository.get_product_by_bar_code(product.bar_code)
 
         self.assertEqual(stored_quantity, 0)
 
@@ -100,8 +98,8 @@ class TestSQLiteProductRepository(unittest.TestCase):
         ):
             self.repository.add_product(duplicate_product, quantity=20)
 
-        stored_product, stored_quantity = (
-            self.repository.get_product_by_bar_code(original_product.bar_code)
+        stored_product, stored_quantity = self.repository.get_product_by_bar_code(
+            original_product.bar_code
         )
         record_count = self.connection.execute(
             "SELECT COUNT(*) FROM products;"
@@ -181,10 +179,8 @@ class TestSQLiteProductRepository(unittest.TestCase):
 
         self.repository.update_product(updated_product)
 
-        stored_product, stored_quantity = (
-            self.repository.get_product_by_bar_code(
-                original_product.bar_code
-            )
+        stored_product, stored_quantity = self.repository.get_product_by_bar_code(
+            original_product.bar_code
         )
         self.assertEqual(stored_product.name, "Produto atualizado")
         self.assertEqual(stored_product.brand, "Marca atualizada")
@@ -194,12 +190,8 @@ class TestSQLiteProductRepository(unittest.TestCase):
 
     def test_ad02_create_table_adds_active_column(self):
         """AD02: tabela nova deve possuir active com valor padrão 1."""
-        columns = self.connection.execute(
-            "PRAGMA table_info(products);"
-        ).fetchall()
-        active_column = next(
-            column for column in columns if column[1] == "active"
-        )
+        columns = self.connection.execute("PRAGMA table_info(products);").fetchall()
+        active_column = next(column for column in columns if column[1] == "active")
 
         self.assertEqual(active_column[3], 1)
         self.assertEqual(active_column[4], "1")
@@ -279,8 +271,8 @@ class TestSQLiteProductRepository(unittest.TestCase):
 
         self.repository.update_stock(product.bar_code, quantity=20)
 
-        stored_product, stored_quantity = (
-            self.repository.get_product_by_bar_code(product.bar_code)
+        stored_product, stored_quantity = self.repository.get_product_by_bar_code(
+            product.bar_code
         )
         search_results = self.repository.search_products_by_text("arroz")
         self.assertEqual(stored_product.bar_code, product.bar_code)

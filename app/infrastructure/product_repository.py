@@ -49,8 +49,7 @@ class SQLiteProductRepository:
 
         if self.get_product_by_bar_code(product.bar_code) is not None:
             raise DuplicateBarcodeError(
-                "Já existe um produto com o código de barras "
-                f"{product.bar_code}."
+                f"Já existe um produto com o código de barras {product.bar_code}."
             )
 
         self.connection.execute(
@@ -189,9 +188,7 @@ class SQLiteProductRepository:
 
     def _ensure_active_column(self) -> None:
         """AD02: adiciona active a bancos criados antes da remoção lógica."""
-        columns = self.connection.execute(
-            "PRAGMA table_info(products);"
-        ).fetchall()
+        columns = self.connection.execute("PRAGMA table_info(products);").fetchall()
         column_names = {column[1] for column in columns}
 
         if "active" not in column_names:

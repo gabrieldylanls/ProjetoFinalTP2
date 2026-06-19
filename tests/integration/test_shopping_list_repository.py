@@ -30,9 +30,7 @@ class TestUS03SQLiteShoppingListRepository(unittest.TestCase):
         )
 
         self.repository.add_shopping_list(shopping_list)
-        stored_list = self.repository.get_shopping_list_by_id(
-            shopping_list.list_id
-        )
+        stored_list = self.repository.get_shopping_list_by_id(shopping_list.list_id)
 
         self.assertIsInstance(shopping_list.list_id, int)
         self.assertEqual(stored_list.user_id, 7)

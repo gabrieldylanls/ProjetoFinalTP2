@@ -36,9 +36,7 @@ class TestUS01UserService(unittest.TestCase):
 
         self.assertEqual(user.role, "user")
         self.assertNotEqual(user.password_hash, "senha-segura")
-        self.assertTrue(
-            check_password_hash(user.password_hash, "senha-segura")
-        )
+        self.assertTrue(check_password_hash(user.password_hash, "senha-segura"))
         self.assertIs(self.repository.users[user.email], user)
 
     def test_us01_create_admin_user(self):

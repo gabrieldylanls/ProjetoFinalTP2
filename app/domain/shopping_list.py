@@ -103,11 +103,7 @@ class ShoppingListItem:
     @staticmethod
     def _validate_quantity(quantity: int) -> int:
         """US03: valida a quantidade planejada do item."""
-        if (
-            isinstance(quantity, bool)
-            or not isinstance(quantity, int)
-            or quantity <= 0
-        ):
+        if isinstance(quantity, bool) or not isinstance(quantity, int) or quantity <= 0:
             raise InvalidShoppingListError(
                 "A quantidade do item deve ser maior que zero."
             )

@@ -128,9 +128,7 @@ class ProductService:
         bar_code: str,
     ) -> tuple[Product, int]:
         """AD02: retorna o produto ou informa que ele não existe."""
-        stored_product = self.product_repository.get_product_by_bar_code(
-            bar_code
-        )
+        stored_product = self.product_repository.get_product_by_bar_code(bar_code)
         if stored_product is None:
             raise ProductNotFoundError(
                 f"Produto com o código de barras {bar_code} não encontrado."

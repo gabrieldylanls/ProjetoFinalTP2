@@ -62,13 +62,9 @@ class ProductPriceService:
 
     def _ensure_product_exists(self, product_bar_code: str) -> None:
         """US06: garante que o produto informado esteja cadastrado."""
-        if (
-            self.product_repository.get_product_by_bar_code(product_bar_code)
-            is None
-        ):
+        if self.product_repository.get_product_by_bar_code(product_bar_code) is None:
             raise ProductNotFoundError(
-                "Produto com o código de barras "
-                f"{product_bar_code} não encontrado."
+                f"Produto com o código de barras {product_bar_code} não encontrado."
             )
 
     def _ensure_store_exists(self, store_id: int) -> None:

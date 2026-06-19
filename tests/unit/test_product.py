@@ -132,8 +132,7 @@ class TestProductCreation(unittest.TestCase):
             with self.subTest(bar_code=bar_code):
                 with self.assertRaisesRegex(
                     InvalidProductError,
-                    "^O código de barras deve conter exatamente "
-                    "13 dígitos ASCII\\.$",
+                    "^O código de barras deve conter exatamente 13 dígitos ASCII\\.$",
                 ):
                     self.create_product(bar_code=bar_code)
 
