@@ -72,14 +72,7 @@ class ProductService:
         Pré-condição: o código deve existir e os novos dados devem ser válidos.
         Pós-condição: retorna produto e quantidade com alterações persistidas.
         """
-        stored_product = self.product_repository.get_product_by_bar_code(
-            bar_code
-        )
-        if stored_product is None:
-            raise ProductNotFoundError(
-                f"Produto com o código de barras {bar_code} não encontrado."
-            )
-
+        stored_product = self._get_product_or_raise(bar_code)
         _, quantity = stored_product
         updated_product = Product(
             name=name,
@@ -96,6 +89,14 @@ class ProductService:
         Pré-condição: bar_code deve identificar um produto cadastrado.
         Pós-condição: o produto permanece armazenado, marcado como inativo.
         """
+        self._get_product_or_raise(bar_code)
+        self.product_repository.deactivate_product(bar_code)
+
+    def _get_product_or_raise(
+        self,
+        bar_code: str,
+    ) -> tuple[Product, int]:
+        """AD02: retorna o produto ou informa que ele não existe."""
         stored_product = self.product_repository.get_product_by_bar_code(
             bar_code
         )
@@ -104,4 +105,4 @@ class ProductService:
                 f"Produto com o código de barras {bar_code} não encontrado."
             )
 
-        self.product_repository.deactivate_product(bar_code)
+        return stored_product
