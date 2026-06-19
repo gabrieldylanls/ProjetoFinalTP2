@@ -5,11 +5,13 @@ import sqlite3
 from app.application.cart_service import CartService
 from app.application.product_service import ProductService
 from app.application.shopping_list_service import ShoppingListService
+from app.application.store_service import StoreService
 from app.application.user_service import UserService
 from app.infrastructure.product_repository import SQLiteProductRepository
 from app.infrastructure.shopping_list_repository import (
     SQLiteShoppingListRepository,
 )
+from app.infrastructure.store_repository import SQLiteStoreRepository
 from app.infrastructure.user_repository import SQLiteUserRepository
 
 
@@ -66,3 +68,16 @@ def initialize_shopping_list_service(
         repository,
         product_repository=product_repository,
     )
+
+
+def initialize_store_service(
+    connection: sqlite3.Connection,
+) -> StoreService:
+    """US06: inicializa as dependências de locais de compra.
+
+    Pré-condição: connection deve ser uma conexão SQLite aberta.
+    Pós-condição: retorna o serviço com tabela e repositório configurados.
+    """
+    repository = SQLiteStoreRepository(connection)
+    repository.create_table()
+    return StoreService(repository)

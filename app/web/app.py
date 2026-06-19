@@ -15,6 +15,7 @@ from app.domain.exceptions import (
     InvalidProductError,
     InvalidQuantityError,
     InvalidShoppingListError,
+    InvalidStoreError,
     InvalidUserError,
     ProductNotFoundError,
     ShoppingListItemNotFoundError,
@@ -26,14 +27,16 @@ from app.web.dependencies import (
     initialize_cart_service,
     initialize_product_service,
     initialize_shopping_list_service,
+    initialize_store_service,
     initialize_user_service,
 )
 from app.web.routes import create_product_blueprint
 from app.web.shopping_list_routes import create_shopping_list_blueprint
+from app.web.store_routes import create_store_blueprint
 
 
 def create_app(connection: sqlite3.Connection) -> Flask:
-    """AD01/US01/US02/US03/US04/US05/AD02/AD03/RNF02: cria a aplicação.
+    """AD01/US01-US06/AD02/AD03/RNF02: cria a aplicação Flask.
 
     Pré-condição: connection deve ser uma conexão SQLite aberta.
     Pós-condição: retorna a aplicação com autenticação e autorização.
@@ -47,6 +50,7 @@ def create_app(connection: sqlite3.Connection) -> Flask:
     cart_service = initialize_cart_service(product_service)
     user_service = initialize_user_service(connection)
     shopping_list_service = initialize_shopping_list_service(connection)
+    store_service = initialize_store_service(connection)
 
     flask_app.register_blueprint(
         create_product_blueprint(product_service)
@@ -56,6 +60,7 @@ def create_app(connection: sqlite3.Connection) -> Flask:
     flask_app.register_blueprint(
         create_shopping_list_blueprint(shopping_list_service)
     )
+    flask_app.register_blueprint(create_store_blueprint(store_service))
     _register_error_handlers(flask_app)
 
     return flask_app
@@ -68,6 +73,7 @@ def _register_error_handlers(flask_app: Flask) -> None:
     @flask_app.errorhandler(InvalidCartError)
     @flask_app.errorhandler(InvalidQuantityError)
     @flask_app.errorhandler(InvalidShoppingListError)
+    @flask_app.errorhandler(InvalidStoreError)
     @flask_app.errorhandler(InvalidUserError)
     def handle_validation_error(error):
         return jsonify({"erro": str(error)}), 400

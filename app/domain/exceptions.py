@@ -47,3 +47,7 @@ class InvalidCartError(Exception):
 
 class CartItemNotFoundError(Exception):
     """Indica que o item solicitado não existe no carrinho."""
+
+
+class InvalidStoreError(Exception):
+    """Indica que um local de compra viola uma pré-condição."""
