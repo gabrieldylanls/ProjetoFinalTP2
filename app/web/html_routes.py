@@ -100,7 +100,7 @@ def create_html_blueprint(
         observed_prices = {}
 
         if store_id:
-            selected_store = store_service.store_repository.get_store_by_id(store_id)
+            selected_store = store_service.get_store(store_id)
             store_items, current_page, total_pages, total_products = (
                 product_price_service.list_store_products_page(
                     store_id=store_id,

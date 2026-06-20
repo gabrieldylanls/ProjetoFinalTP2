@@ -41,3 +41,11 @@ class StoreService:
         Pós-condição: retorna todos os locais ordenados pelo repositório.
         """
         return self.store_repository.list_stores()
+
+    def get_store(self, store_id: int) -> Store | None:
+        """US06/WEB: consulta um local pelo identificador.
+
+        Pré-condição: store_id deve identificar o local procurado.
+        Pós-condição: retorna o local encontrado ou None.
+        """
+        return self.store_repository.get_store_by_id(store_id)
