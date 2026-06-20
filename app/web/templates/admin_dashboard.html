@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Painel administrativo | Compra Certa{% endblock %}
+
+{% block content %}
+  <h1>Painel administrativo</h1>
+  <div class="grid">
+    <article class="card">
+      <h2>Produtos cadastrados</h2>
+      <p class="metric">{{ metrics.total_products }}</p>
+    </article>
+    <article class="card">
+      <h2>Usuários cadastrados</h2>
+      <p class="metric">{{ metrics.total_users }}</p>
+    </article>
+    <article class="card">
+      <h2>Listas de compras</h2>
+      <p class="metric">{{ metrics.total_shopping_lists }}</p>
+    </article>
+    <article class="card">
+      <h2>Preços registrados</h2>
+      <p class="metric">{{ metrics.total_registered_prices }}</p>
+    </article>
+  </div>
+{% endblock %}

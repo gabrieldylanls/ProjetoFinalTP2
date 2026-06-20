@@ -5,27 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Gerência de Compras{% endblock %}</title>
     <style>
-      body { font-family: sans-serif; margin: 0 auto; max-width: 960px; padding: 1rem; }
-      nav { display: flex; gap: 1rem; margin-bottom: 2rem; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { border: 1px solid #ccc; padding: .5rem; text-align: left; }
+      :root {
+        color-scheme: light;
+        --primary: #1f6f50;
+        --primary-dark: #15523b;
+        --surface: #fff;
+        --background: #f5f7f6;
+        --border: #d9e2dd;
+        --text: #17211d;
+        --muted: #5d6b64;
+      }
+      * { box-sizing: border-box; }
+      body {
+        background: var(--background);
+        color: var(--text);
+        font-family: system-ui, sans-serif;
+        margin: 0;
+      }
+      header { background: var(--surface); border-bottom: 1px solid var(--border); }
+      nav {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 0 auto;
+        max-width: 1120px;
+        padding: 1rem;
+      }
+      nav a { color: var(--primary-dark); font-weight: 600; text-decoration: none; }
+      nav .brand { font-size: 1.2rem; margin-right: auto; }
+      main { margin: 0 auto; max-width: 1120px; padding: 2rem 1rem; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: .75rem;
+        padding: 1.25rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+      .metric { font-size: 2rem; font-weight: 700; margin: .25rem 0; }
+      .muted, .empty { color: var(--muted); }
+      .table-wrapper { overflow-x: auto; }
+      table {
+        background: var(--surface);
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td { border-bottom: 1px solid var(--border); padding: .75rem; text-align: left; }
       form { display: grid; gap: .75rem; max-width: 32rem; }
-      input, button { font: inherit; padding: .5rem; }
-      .empty { color: #555; }
+      .inline-form { display: inline; }
+      input, button {
+        border: 1px solid var(--border);
+        border-radius: .4rem;
+        font: inherit;
+        padding: .65rem;
+      }
+      button {
+        background: var(--primary);
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .pagination {
+        align-items: center;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+      }
+      .pagination a { color: var(--primary-dark); font-weight: 600; }
+      @media (max-width: 640px) {
+        nav .brand { flex-basis: 100%; }
+        main { padding-top: 1rem; }
+      }
     </style>
   </head>
   <body>
-    <nav aria-label="Navegação principal">
-      <a href="{{ url_for('html.home_page') }}">Início</a>
-      <a href="{{ url_for('html.products_page') }}">Produtos</a>
-      <a href="{{ url_for('html.cart_page') }}">Carrinho</a>
-      <a href="{{ url_for('html.new_product_page') }}">Cadastrar produto</a>
-      {% if session.get("user_id") %}
-        <span>Perfil: {{ session.get("role") }}</span>
-      {% else %}
-        <a href="{{ url_for('html.login_page') }}">Entrar</a>
-      {% endif %}
-    </nav>
+    <header>
+      <nav aria-label="Navegação principal">
+        <a class="brand" href="{{ url_for('html.home_page') }}">Compra Certa</a>
+        <a href="{{ url_for('html.products_page') }}">Produtos</a>
+        {% if session.get("user_id") %}
+          <a href="{{ url_for('html.stores_page') }}">Locais de compra</a>
+          <a href="{{ url_for('html.cart_page') }}">Carrinho</a>
+          {% if session.get("role") == "admin" %}
+            <a href="{{ url_for('html.admin_dashboard') }}">Painel administrativo</a>
+            <a href="{{ url_for('html.new_product_page') }}">Cadastrar produto</a>
+          {% endif %}
+          <span class="muted">Perfil: {{ session.get("role") }}</span>
+          <form
+            class="inline-form"
+            method="post"
+            action="{{ url_for('html.logout_page') }}"
+          >
+            <button type="submit">Sair</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('html.login_page') }}">Entrar</a>
+        {% endif %}
+      </nav>
+    </header>
     <main>
       {% block content %}{% endblock %}
     </main>

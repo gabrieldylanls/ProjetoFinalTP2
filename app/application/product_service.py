@@ -1,5 +1,7 @@
 """Casos de uso relacionados a produtos."""
 
+import math
+
 from app.domain.exceptions import DuplicateBarcodeError, ProductNotFoundError
 from app.domain.product import Product
 from app.domain.quantity import validate_quantity
@@ -67,6 +69,30 @@ class ProductService:
         Pós-condição: retorna produtos e estoques ordenados pelo repositório.
         """
         return self.product_repository.list_active_products()
+
+    def list_products_page(
+        self,
+        query: str,
+        page: int,
+        page_size: int = 50,
+    ) -> tuple[list[tuple[Product, int]], int, int, int]:
+        """WEB: lista uma página do catálogo, com busca opcional.
+
+        Pré-condição: page e page_size devem ser inteiros positivos.
+        Pós-condição: retorna itens, página atual, total de páginas e registros.
+        """
+        normalized_page = max(page, 1)
+        normalized_query = query.strip()
+        total = self.product_repository.count_active_products(normalized_query)
+        total_pages = max(math.ceil(total / page_size), 1)
+        current_page = min(normalized_page, total_pages)
+        offset = (current_page - 1) * page_size
+        products = self.product_repository.list_active_products_page(
+            query=normalized_query,
+            limit=page_size,
+            offset=offset,
+        )
+        return products, current_page, total_pages, total
 
     def get_product(self, bar_code: str) -> tuple[Product, int]:
         """US04: consulta um produto para uso em outros casos de uso.

@@ -114,9 +114,7 @@ class TestWEBHtmlRoutes(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(
-            response.headers["Location"].endswith("/admin/dashboard")
-        )
+        self.assertTrue(response.headers["Location"].endswith("/admin/dashboard"))
 
     def test_us01_web_login_invalid_credentials_returns_html(self):
         """US01/WEB: credenciais inválidas devem manter a tela com HTTP 401."""

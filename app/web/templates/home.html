@@ -3,6 +3,17 @@
 {% block title %}Início | Gerência de Compras{% endblock %}
 
 {% block content %}
-  <h1>Sistema de Gerência de Compras</h1>
-  <p>Consulte produtos, compare informações e acompanhe seu carrinho.</p>
+  <section class="card">
+    <h1>Sistema de Gerência de Compras</h1>
+    {% if session.get("role") == "admin" %}
+      <p>Gerencie o catálogo, estoque, locais e acompanhe as métricas.</p>
+      <a href="{{ url_for('html.admin_dashboard') }}">Abrir painel administrativo</a>
+    {% elif session.get("user_id") %}
+      <p>Consulte produtos, locais de compra e acompanhe seu carrinho.</p>
+      <a href="{{ url_for('html.products_page') }}">Explorar catálogo</a>
+    {% else %}
+      <p>Entre para acessar o catálogo, os locais de compra e seu carrinho.</p>
+      <a href="{{ url_for('html.login_page') }}">Entrar no sistema</a>
+    {% endif %}
+  </section>
 {% endblock %}

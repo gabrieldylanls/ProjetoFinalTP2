@@ -3,9 +3,11 @@
 import sqlite3
 from pathlib import Path
 
-from app.application.product_service import ProductService
+from app.application.store_service import StoreService
 from app.application.user_service import UserService
+from app.domain.product import Product
 from app.infrastructure.product_repository import SQLiteProductRepository
+from app.infrastructure.store_repository import SQLiteStoreRepository
 from app.infrastructure.user_repository import SQLiteUserRepository
 
 DEMO_USERS = (
@@ -38,24 +40,61 @@ DEMO_PRODUCTS = (
     ("Papel Higiênico", "Neve", 14.50, "7891000000012", 16),
 )
 
+DEMO_STORES = (
+    ("Mercado Central", "Rua Principal, 100", "Aberto todos os dias"),
+    ("Supermercado Econômico", "Avenida Brasil, 450", "Estacionamento gratuito"),
+    ("Atacadão Popular", "Rodovia Norte, 1200", "Vendas em atacado e varejo"),
+    ("Empório da Praça", "Praça das Flores, 25", "Produtos artesanais"),
+    ("Mercado do Bairro", "Rua das Acácias, 78", None),
+    ("Hipermercado Avenida", "Avenida Central, 980", "Funcionamento 24 horas"),
+)
+
+GENERATED_PRODUCT_COUNT = 3000
+GENERATED_NAMES = (
+    "Arroz",
+    "Feijão",
+    "Macarrão",
+    "Café",
+    "Leite",
+    "Biscoito",
+    "Farinha",
+    "Açúcar",
+    "Molho",
+    "Sabonete",
+    "Detergente",
+    "Papel Toalha",
+)
+GENERATED_BRANDS = (
+    "Boa Compra",
+    "Casa Feliz",
+    "Sabor Real",
+    "Dia a Dia",
+    "Nossa Marca",
+    "Seleção",
+)
+
 
 def seed_demo_data(connection: sqlite3.Connection) -> dict[str, int]:
-    """DEMO: cria usuários e produtos fictícios ausentes.
+    """DEMO: cria usuários, locais e milhares de produtos ausentes.
 
     Pré-condição: connection deve ser uma conexão SQLite aberta.
-    Pós-condição: retorna quantos usuários e produtos foram criados.
+    Pós-condição: retorna as quantidades criadas em cada catálogo.
     """
     product_repository = SQLiteProductRepository(connection)
     product_repository.create_table()
     user_repository = SQLiteUserRepository(connection)
     user_repository.create_table()
-    product_service = ProductService(product_repository)
+    store_repository = SQLiteStoreRepository(connection)
+    store_repository.create_table()
     user_service = UserService(user_repository)
+    store_service = StoreService(store_repository)
 
     users_created = _seed_users(user_service, user_repository)
-    products_created = _seed_products(product_service, product_repository)
+    stores_created = _seed_stores(store_service, store_repository)
+    products_created = _seed_products(product_repository)
     return {
         "users_created": users_created,
+        "stores_created": stores_created,
         "products_created": products_created,
     }
 
@@ -83,20 +122,62 @@ def _seed_users(user_service, user_repository) -> int:
     return created
 
 
-def _seed_products(product_service, product_repository) -> int:
-    """DEMO: cria somente os produtos fictícios ausentes."""
+def _seed_stores(store_service, store_repository) -> int:
+    """DEMO: cria somente os locais de compra ausentes."""
+    existing = {
+        (store.name.casefold(), store.address.casefold())
+        for store in store_repository.list_stores()
+    }
     created = 0
-    for name, brand, price, bar_code, quantity in DEMO_PRODUCTS:
-        if product_repository.get_product_by_bar_code(bar_code) is None:
-            product_service.create_product(
+    for name, address, observation in DEMO_STORES:
+        key = (name.casefold(), address.casefold())
+        if key not in existing:
+            store_service.create_store(
                 name=name,
-                brand=brand,
-                price=price,
-                bar_code=bar_code,
-                quantity=quantity,
+                address=address,
+                observation=observation,
             )
             created += 1
     return created
+
+
+def _seed_products(product_repository) -> int:
+    """DEMO: cria produtos validados em lote e sem duplicação."""
+    existing_bar_codes = product_repository.list_bar_codes()
+    missing_products = []
+    for name, brand, price, bar_code, quantity in _demo_product_rows():
+        if bar_code not in existing_bar_codes:
+            missing_products.append(
+                (
+                    Product(
+                        name=name,
+                        brand=brand,
+                        price=price,
+                        bar_code=bar_code,
+                    ),
+                    quantity,
+                )
+            )
+    product_repository.add_products(missing_products)
+    return len(missing_products)
+
+
+def _demo_product_rows():
+    """DEMO: produz dados determinísticos para o catálogo fictício."""
+    yield from DEMO_PRODUCTS
+    for index in range(1, GENERATED_PRODUCT_COUNT + 1):
+        name = GENERATED_NAMES[(index - 1) % len(GENERATED_NAMES)]
+        brand = GENERATED_BRANDS[(index - 1) % len(GENERATED_BRANDS)]
+        price = round(2.50 + ((index * 137) % 2500) / 100, 2)
+        bar_code = f"790{index:010d}"
+        quantity = (index * 7) % 120
+        yield (
+            f"{name} Fictício {index:04d}",
+            brand,
+            price,
+            bar_code,
+            quantity,
+        )
 
 
 if __name__ == "__main__":
@@ -104,5 +185,6 @@ if __name__ == "__main__":
     print(
         "Dados de demonstração prontos: "
         f"{result['users_created']} usuários e "
+        f"{result['stores_created']} locais e "
         f"{result['products_created']} produtos criados."
     )

@@ -67,7 +67,8 @@ Credenciais de demonstração:
 - Usuário comum: `usuario@example.com` / `usuario123`
 
 A população é idempotente: executá-la novamente não duplica usuários ou
-produtos fictícios.
+produtos fictícios. A carga inclui mais de 3.000 produtos e seis locais de
+compra.
 
 ## Testes
 

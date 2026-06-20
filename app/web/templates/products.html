@@ -14,29 +14,42 @@
   {% if query %}
     <h2>Resultados para “{{ query }}”</h2>
   {% endif %}
+  <p class="muted">{{ total_products }} produto(s) encontrado(s).</p>
 
   {% if products %}
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Marca</th>
-          <th>Preço base</th>
-          <th>Estoque</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for product, quantity in products %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
           <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ product.brand }}</td>
-            <td>R$ {{ "%.2f"|format(product.price) }}</td>
-            <td>{{ quantity }}</td>
+            <th>Nome</th>
+            <th>Marca</th>
+            <th>Preço base</th>
+            <th>Estoque</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for product, quantity in products %}
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.brand }}</td>
+              <td>R$ {{ "%.2f"|format(product.price) }}</td>
+              <td>{{ quantity }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% else %}
     <p class="empty">Nenhum produto encontrado.</p>
   {% endif %}
+
+  <nav class="pagination" aria-label="Paginação do catálogo">
+    {% if page > 1 %}
+      <a href="{{ url_for('html.products_page', q=query, page=page - 1) }}">Anterior</a>
+    {% endif %}
+    <span>Página {{ page }} de {{ total_pages }}</span>
+    {% if page < total_pages %}
+      <a href="{{ url_for('html.products_page', q=query, page=page + 1) }}">Próxima</a>
+    {% endif %}
+  </nav>
 {% endblock %}

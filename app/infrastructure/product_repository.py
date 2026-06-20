@@ -132,6 +132,91 @@ class SQLiteProductRepository:
         ).fetchall()
         return [self._to_product_with_quantity(row) for row in rows]
 
+    def list_active_products_page(
+        self,
+        query: str,
+        limit: int,
+        offset: int,
+    ) -> list[tuple[Product, int]]:
+        """WEB: lista uma página de produtos ativos.
+
+        Pré-condição: limit e offset devem representar uma página válida.
+        Pós-condição: retorna apenas os produtos da página solicitada.
+        """
+        search_pattern = f"%{query}%"
+        rows = self.connection.execute(
+            """
+            SELECT bar_code, name, brand, price, quantity
+            FROM products
+            WHERE active = 1
+              AND (
+                  ? = ''
+                  OR name LIKE ? COLLATE NOCASE
+                  OR brand LIKE ? COLLATE NOCASE
+              )
+            ORDER BY name COLLATE NOCASE, bar_code
+            LIMIT ? OFFSET ?;
+            """,
+            (query, search_pattern, search_pattern, limit, offset),
+        ).fetchall()
+        return [self._to_product_with_quantity(row) for row in rows]
+
+    def count_active_products(self, query: str = "") -> int:
+        """WEB: conta produtos ativos compatíveis com a busca.
+
+        Pré-condição: query deve ser uma string, possivelmente vazia.
+        Pós-condição: retorna a quantidade de registros compatíveis.
+        """
+        search_pattern = f"%{query}%"
+        return self.connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM products
+            WHERE active = 1
+              AND (
+                  ? = ''
+                  OR name LIKE ? COLLATE NOCASE
+                  OR brand LIKE ? COLLATE NOCASE
+              );
+            """,
+            (query, search_pattern, search_pattern),
+        ).fetchone()[0]
+
+    def list_bar_codes(self) -> set[str]:
+        """DEMO: retorna códigos já persistidos para carga idempotente.
+
+        Pré-condição: a tabela products deve existir.
+        Pós-condição: retorna um conjunto com todos os códigos cadastrados.
+        """
+        rows = self.connection.execute("SELECT bar_code FROM products;").fetchall()
+        return {row[0] for row in rows}
+
+    def add_products(self, products: list[tuple[Product, int]]) -> None:
+        """DEMO: persiste vários produtos em uma única transação.
+
+        Pré-condição: produtos e quantidades devem ser válidos e únicos.
+        Pós-condição: todos os registros são inseridos e confirmados.
+        """
+        for _, quantity in products:
+            validate_quantity(quantity)
+        self.connection.executemany(
+            """
+            INSERT INTO products (bar_code, name, brand, price, quantity)
+            VALUES (?, ?, ?, ?, ?);
+            """,
+            [
+                (
+                    product.bar_code,
+                    product.name,
+                    product.brand,
+                    product.price,
+                    quantity,
+                )
+                for product, quantity in products
+            ],
+        )
+        self.connection.commit()
+
     def update_product(self, product: Product) -> None:
         """AD02: persiste nome, marca e preço de um produto.
 

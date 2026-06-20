@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Locais de compra | Compra Certa{% endblock %}
+
+{% block content %}
+  <h1>Locais de compra</h1>
+  <div class="grid">
+    {% for store in stores %}
+      <article class="card">
+        <h2>{{ store.name }}</h2>
+        <p>{{ store.address }}</p>
+        {% if store.observation %}
+          <p class="muted">{{ store.observation }}</p>
+        {% endif %}
+      </article>
+    {% else %}
+      <p class="empty">Nenhum local cadastrado.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

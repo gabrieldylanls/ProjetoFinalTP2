@@ -2,17 +2,21 @@
 
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
+from app.application.admin_metrics_service import AdminMetricsService
 from app.application.cart_service import CartService
 from app.application.product_service import ProductService
+from app.application.store_service import StoreService
 from app.application.user_service import UserService
 from app.domain.exceptions import InvalidCredentialsError
-from app.web.authorization import admin_required
+from app.web.authorization import admin_required, authenticated_required
 
 
 def create_html_blueprint(
     product_service: ProductService,
     cart_service: CartService,
     user_service: UserService,
+    store_service: StoreService,
+    admin_metrics_service: AdminMetricsService,
 ) -> Blueprint:
     """US01/WEB: cria páginas HTML reutilizando os serviços existentes.
 
@@ -49,9 +53,22 @@ def create_html_blueprint(
             session.clear()
             session["user_id"] = user.user_id
             session["role"] = user.role
-            return redirect(url_for("html.products_page"))
+            destination = (
+                "html.admin_dashboard" if user.role == "admin" else "html.products_page"
+            )
+            return redirect(url_for(destination))
 
         return render_template("login.html", error=None)
+
+    @blueprint.post("/logout")
+    def logout_page():
+        """US01/WEB: encerra a sessão e retorna à tela de login.
+
+        Pré-condição: nenhuma.
+        Pós-condição: limpa a sessão e redireciona para /login.
+        """
+        session.clear()
+        return redirect(url_for("html.login_page"))
 
     @blueprint.get("/catalog")
     def products_page():
@@ -61,15 +78,46 @@ def create_html_blueprint(
         Pós-condição: retorna o catálogo renderizado com HTTP 200.
         """
         query = request.args.get("q", "").strip()
-        products = (
-            product_service.search_products(query)
-            if query
-            else product_service.list_products()
+        page = request.args.get("page", default=1, type=int) or 1
+        products, current_page, total_pages, total_products = (
+            product_service.list_products_page(
+                query=query,
+                page=page,
+            )
         )
         return render_template(
             "products.html",
             products=products,
             query=query,
+            page=current_page,
+            total_pages=total_pages,
+            total_products=total_products,
+        )
+
+    @blueprint.get("/stores/view")
+    @authenticated_required
+    def stores_page():
+        """US06/WEB: exibe locais para um usuário autenticado.
+
+        Pré-condição: a sessão deve conter um usuário autenticado.
+        Pós-condição: retorna os locais de compra com HTTP 200.
+        """
+        return render_template(
+            "stores.html",
+            stores=store_service.list_stores(),
+        )
+
+    @blueprint.get("/admin/dashboard")
+    @admin_required
+    def admin_dashboard():
+        """AD04/WEB: exibe métricas para o administrador.
+
+        Pré-condição: a sessão deve pertencer a um administrador.
+        Pós-condição: retorna o painel administrativo com HTTP 200.
+        """
+        return render_template(
+            "admin_dashboard.html",
+            metrics=admin_metrics_service.get_metrics(),
         )
 
     @blueprint.route("/admin/products/new", methods=["GET", "POST"])
