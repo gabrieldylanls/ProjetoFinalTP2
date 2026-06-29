@@ -31,6 +31,8 @@ class TestUS06StoreRoutes(unittest.TestCase):
                 "name": "Mercado Central",
                 "address": "Rua Principal, 100",
                 "observation": "Aberto aos domingos",
+                "latitude": -15.793889,
+                "longitude": -47.882778,
             },
         )
 
@@ -42,6 +44,8 @@ class TestUS06StoreRoutes(unittest.TestCase):
                 "name": "Mercado Central",
                 "address": "Rua Principal, 100",
                 "observation": "Aberto aos domingos",
+                "latitude": -15.793889,
+                "longitude": -47.882778,
             },
         )
 
@@ -67,6 +71,8 @@ class TestUS06StoreRoutes(unittest.TestCase):
             json={
                 "name": "Mercado Central",
                 "address": "Rua Principal, 100",
+                "latitude": -15.793889,
+                "longitude": -47.882778,
             },
         )
         self.authenticate_as("user", user_id=7)
@@ -75,6 +81,46 @@ class TestUS06StoreRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()[0]["name"], "Mercado Central")
+
+    def test_us06_gps_authenticated_user_finds_nearest_store(self):
+        """US06/GPS: usuário autenticado deve buscar a loja mais próxima."""
+        self.authenticate_as("admin")
+        self.client.post(
+            "/stores",
+            json={
+                "name": "Mercado Distante",
+                "address": "Taguatinga",
+                "latitude": -15.832,
+                "longitude": -48.057,
+            },
+        )
+        self.client.post(
+            "/stores",
+            json={
+                "name": "Mercado Próximo",
+                "address": "Asa Sul",
+                "latitude": -15.794,
+                "longitude": -47.883,
+            },
+        )
+        self.authenticate_as("user", user_id=7)
+
+        response = self.client.get(
+            "/stores/nearest?latitude=-15.793889&longitude=-47.882778"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["store"]["name"], "Mercado Próximo")
+        self.assertLess(payload["distance_km"], 1)
+
+    def test_us06_gps_reject_unauthenticated_nearest_store_route(self):
+        """US06/GPS: visitante não deve buscar loja mais próxima."""
+        response = self.client.get(
+            "/stores/nearest?latitude=-15.793889&longitude=-47.882778"
+        )
+
+        self.assertEqual(response.status_code, 401)
 
     def test_us06_reject_common_user_store_creation(self):
         """US06: usuário comum não deve cadastrar local."""

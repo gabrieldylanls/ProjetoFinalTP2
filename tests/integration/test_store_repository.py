@@ -23,12 +23,16 @@ class TestUS06SQLiteStoreRepository(unittest.TestCase):
             name="Supermercado B",
             address="Avenida Dois, 20",
             observation=None,
+            latitude=-15.832,
+            longitude=-48.057,
         )
         first_store = Store(
             store_id=None,
             name="Mercado A",
             address="Rua Um, 10",
             observation="24 horas",
+            latitude=-15.793889,
+            longitude=-47.882778,
         )
 
         self.repository.add_store(second_store)
@@ -45,3 +49,21 @@ class TestUS06SQLiteStoreRepository(unittest.TestCase):
         )
         self.assertEqual(stores[0].address, "Rua Um, 10")
         self.assertEqual(stores[0].observation, "24 horas")
+        self.assertEqual(stores[0].latitude, -15.793889)
+        self.assertEqual(stores[0].longitude, -47.882778)
+
+    def test_us06_gps_get_store_by_id_with_coordinates(self):
+        """US06/GPS: deve recuperar local com coordenadas persistidas."""
+        store = Store(
+            store_id=None,
+            name="Mercado Central",
+            address="Rua Principal, 100",
+            latitude=-15.793889,
+            longitude=-47.882778,
+        )
+
+        self.repository.add_store(store)
+        persisted_store = self.repository.get_store_by_id(store.store_id)
+
+        self.assertEqual(persisted_store.latitude, -15.793889)
+        self.assertEqual(persisted_store.longitude, -47.882778)
