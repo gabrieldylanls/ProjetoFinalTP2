@@ -4,18 +4,26 @@ import sqlite3
 
 from app.application.admin_metrics_service import AdminMetricsService
 from app.application.cart_service import CartService
+from app.application.pending_purchase_service import PendingPurchaseService
 from app.application.product_price_service import ProductPriceService
 from app.application.product_service import ProductService
+from app.application.product_suggestion_service import ProductSuggestionService
 from app.application.shopping_list_service import ShoppingListService
 from app.application.store_service import StoreService
 from app.application.user_service import UserService
 from app.infrastructure.admin_metrics_repository import (
     SQLiteAdminMetricsRepository,
 )
+from app.infrastructure.pending_purchase_repository import (
+    SQLitePendingPurchaseRepository,
+)
 from app.infrastructure.product_price_repository import (
     SQLiteProductPriceRepository,
 )
 from app.infrastructure.product_repository import SQLiteProductRepository
+from app.infrastructure.product_suggestion_repository import (
+    SQLiteProductSuggestionRepository,
+)
 from app.infrastructure.shopping_list_repository import (
     SQLiteShoppingListRepository,
 )
@@ -119,4 +127,38 @@ def initialize_product_price_service(
         price_repository=price_repository,
         product_repository=product_service.product_repository,
         store_repository=store_service.store_repository,
+    )
+
+
+def initialize_pending_purchase_service(
+    connection: sqlite3.Connection,
+) -> PendingPurchaseService:
+    """US07: inicializa as dependências de itens pendentes."""
+    pending_repository = SQLitePendingPurchaseRepository(connection)
+    pending_repository.create_table()
+    shopping_list_repository = SQLiteShoppingListRepository(connection)
+    shopping_list_repository.create_table()
+    product_repository = SQLiteProductRepository(connection)
+    product_repository.create_table()
+    price_repository = SQLiteProductPriceRepository(connection)
+    price_repository.create_table()
+    return PendingPurchaseService(
+        pending_repository=pending_repository,
+        shopping_list_repository=shopping_list_repository,
+        product_repository=product_repository,
+        price_repository=price_repository,
+    )
+
+
+def initialize_product_suggestion_service(
+    connection: sqlite3.Connection,
+    product_service: ProductService,
+) -> ProductSuggestionService:
+    """AD05: inicializa as dependências de sugestões de produtos."""
+    suggestion_repository = SQLiteProductSuggestionRepository(connection)
+    suggestion_repository.create_table()
+    return ProductSuggestionService(
+        suggestion_repository=suggestion_repository,
+        product_service=product_service,
+        product_repository=product_service.product_repository,
     )

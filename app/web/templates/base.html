@@ -93,12 +93,15 @@
           <a href="{{ url_for('html.stores_page') }}">Locais de compra</a>
           <a href="{{ url_for('html.cart_page') }}">Carrinho</a>
           <a href="{{ url_for('html.shopping_lists_page') }}">Listas de compras</a>
+          <a href="{{ url_for('html.pending_items_page') }}">Itens pendentes</a>
           {% if session.get("role") == "admin" %}
             <a href="{{ url_for('html.admin_dashboard') }}">Painel administrativo</a>
             <a href="{{ url_for('html.new_product_page') }}">Cadastrar produto</a>
             <a href="{{ url_for('html.new_store_page') }}">Cadastrar loja</a>
+            <a href="{{ url_for('html.product_suggestions_admin_page') }}">Sugestões</a>
           {% else %}
             <a href="{{ url_for('html.user_dashboard') }}">Meu painel</a>
+            <a href="{{ url_for('html.new_product_suggestion_page') }}">Sugerir produto</a>
           {% endif %}
           <span class="muted">Perfil: {{ session.get("role") }}</span>
           <form

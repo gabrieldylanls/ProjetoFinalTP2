@@ -4,8 +4,10 @@ from flask import Blueprint, redirect, render_template, request, session, url_fo
 
 from app.application.admin_metrics_service import AdminMetricsService
 from app.application.cart_service import CartService
+from app.application.pending_purchase_service import PendingPurchaseService
 from app.application.product_price_service import ProductPriceService
 from app.application.product_service import ProductService
+from app.application.product_suggestion_service import ProductSuggestionService
 from app.application.shopping_list_service import ShoppingListService
 from app.application.store_service import StoreService
 from app.application.user_service import UserService
@@ -25,8 +27,10 @@ def create_html_blueprint(
     admin_metrics_service: AdminMetricsService,
     product_price_service: ProductPriceService,
     shopping_list_service: ShoppingListService,
+    pending_service: PendingPurchaseService,
+    suggestion_service: ProductSuggestionService,
 ) -> Blueprint:
-    """US01-US06/AD04/WEB: cria as páginas usando serviços injetados.
+    """US01-US07/AD04/AD05/WEB: cria páginas usando serviços injetados.
 
     Pré-condição: os serviços devem estar inicializados.
     Pós-condição: retorna a blueprint com os fluxos HTML do site.
@@ -154,6 +158,18 @@ def create_html_blueprint(
             query=query,
         )
 
+    @blueprint.post("/shopping-lists/<int:list_id>/items/<bar_code>/pending/view")
+    @authenticated_required
+    def mark_pending_item_page(list_id, bar_code):
+        """US07/WEB: marca item de lista como não comprado."""
+        pending_service.mark_item_as_pending(
+            user_id=session["user_id"],
+            list_id=list_id,
+            bar_code=bar_code,
+            quantity=int(request.form["quantity"]),
+        )
+        return redirect(url_for("html.shopping_list_detail_page", list_id=list_id))
+
     @blueprint.post("/shopping-lists/<int:list_id>/items/view")
     @authenticated_required
     def add_shopping_list_item_page(list_id):
@@ -259,6 +275,36 @@ def create_html_blueprint(
             return redirect(url_for("html.stores_page"))
         return render_template("new_store.html")
 
+    @blueprint.get("/admin/product-suggestions/view")
+    @admin_required
+    def product_suggestions_admin_page():
+        """AD05/WEB: exibe sugestões pendentes para revisão."""
+        return render_template(
+            "product_suggestions_admin.html",
+            suggestions=suggestion_service.list_pending_suggestions(),
+        )
+
+    @blueprint.post("/admin/product-suggestions/<int:suggestion_id>/approve/view")
+    @admin_required
+    def approve_product_suggestion_page(suggestion_id):
+        """AD05/WEB: aprova uma sugestão de produto."""
+        suggestion_service.approve_suggestion(
+            suggestion_id=suggestion_id,
+            reviewer_id=session["user_id"],
+        )
+        return redirect(url_for("html.product_suggestions_admin_page"))
+
+    @blueprint.post("/admin/product-suggestions/<int:suggestion_id>/reject/view")
+    @admin_required
+    def reject_product_suggestion_page(suggestion_id):
+        """AD05/WEB: rejeita uma sugestão de produto."""
+        suggestion_service.reject_suggestion(
+            suggestion_id=suggestion_id,
+            reviewer_id=session["user_id"],
+            rejection_reason=request.form.get("rejection_reason"),
+        )
+        return redirect(url_for("html.product_suggestions_admin_page"))
+
     @blueprint.get("/admin/dashboard")
     @admin_required
     def admin_dashboard():
@@ -282,6 +328,22 @@ def create_html_blueprint(
             )
             return redirect(url_for("html.products_page"))
         return render_template("new_product.html")
+
+    @blueprint.route("/product-suggestions/new", methods=["GET", "POST"])
+    @authenticated_required
+    def new_product_suggestion_page():
+        """AD05/WEB: permite ao usuário sugerir produto ao admin."""
+        if request.method == "POST":
+            suggestion_service.suggest_product(
+                user_id=session["user_id"],
+                name=request.form["name"],
+                brand=request.form["brand"],
+                price=float(request.form["price"]),
+                bar_code=request.form["bar_code"],
+                quantity=int(request.form["quantity"]),
+            )
+            return redirect(url_for("html.products_page"))
+        return render_template("new_product_suggestion.html")
 
     @blueprint.get("/products/<bar_code>/view")
     @authenticated_required
@@ -318,6 +380,33 @@ def create_html_blueprint(
             items=items,
             total=cart_service.calculate_total(items),
         )
+
+    @blueprint.get("/pending-items/view")
+    @authenticated_required
+    def pending_items_page():
+        """US07/WEB: exibe itens não comprados do usuário."""
+        return render_template(
+            "pending_items.html",
+            items=pending_service.list_pending_items(session["user_id"]),
+        )
+
+    @blueprint.post("/pending-items/<bar_code>/update/view")
+    @authenticated_required
+    def update_pending_item_page(bar_code):
+        """US07/WEB: atualiza quantidade de pendência."""
+        pending_service.update_pending_quantity(
+            user_id=session["user_id"],
+            bar_code=bar_code,
+            quantity=int(request.form["quantity"]),
+        )
+        return redirect(url_for("html.pending_items_page"))
+
+    @blueprint.post("/pending-items/<bar_code>/remove/view")
+    @authenticated_required
+    def remove_pending_item_page(bar_code):
+        """US07/WEB: resolve uma pendência."""
+        pending_service.resolve_pending_item(session["user_id"], bar_code)
+        return redirect(url_for("html.pending_items_page"))
 
     @blueprint.post("/cart/view/items")
     @authenticated_required

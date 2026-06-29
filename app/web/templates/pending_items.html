@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Itens pendentes | Compra Certa{% endblock %}
+
+{% block content %}
+  <h1>Itens pendentes</h1>
+  {% if items %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Marca</th>
+            <th>Quantidade</th>
+            <th>Menor preço observado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item, product, best_price in items %}
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.brand }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>
+                {% if best_price %}
+                  R$ {{ "%.2f"|format(best_price[0]) }}
+                  em {{ best_price[3] }}
+                  <span class="muted">({{ best_price[1] }})</span>
+                {% else %}
+                  <span class="muted">Sem preço compartilhado</span>
+                {% endif %}
+              </td>
+              <td>
+                <form
+                  class="inline-form"
+                  method="post"
+                  action="{{ url_for(
+                    'html.update_pending_item_page',
+                    bar_code=item.bar_code
+                  ) }}"
+                >
+                  <input name="quantity" type="number" min="1" value="{{ item.quantity }}" required>
+                  <button type="submit">Atualizar</button>
+                </form>
+                <form
+                  class="inline-form"
+                  method="post"
+                  action="{{ url_for(
+                    'html.remove_pending_item_page',
+                    bar_code=item.bar_code
+                  ) }}"
+                >
+                  <button type="submit">Resolver</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">Nenhum item pendente no momento.</p>
+  {% endif %}
+{% endblock %}
