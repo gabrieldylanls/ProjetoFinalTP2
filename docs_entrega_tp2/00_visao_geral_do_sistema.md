@@ -22,11 +22,13 @@ Foram localizados no código os seguintes escopos:
 - busca de loja mais próxima por coordenadas de GPS com `geopy`;
 - mapa da loja mais próxima com Leaflet e OpenStreetMap;
 - registro e consulta de preços observados por produto e local;
+- itens não comprados/pendentes derivados de listas de compras;
+- sugestão de produtos por usuários e aprovação/rejeição administrativa;
 - painel administrativo com métricas simples;
 - templates HTML mínimos para uso do protótipo;
 - seed de dados de demonstração.
 
-Não foram localizadas implementações marcadas como US07 ou AD05.
+Foram localizadas implementações para US07 e AD05.
 
 ## Tecnologias detectadas no código
 
@@ -147,11 +149,19 @@ Não foram localizadas implementações marcadas como US07 ou AD05.
 | PATCH | `/cart/items/<bar_code>` | US04 alterar item do carrinho. |
 | DELETE | `/cart/items/<bar_code>` | US04 remover item do carrinho. |
 | GET | `/cart/total` | US05 total estimado. |
+| GET | `/pending-items` | US07 listagem de itens não comprados. |
+| POST | `/shopping-lists/<list_id>/items/<bar_code>/pending` | US07 marcar item de lista como pendente. |
+| PATCH | `/pending-items/<bar_code>` | US07 alterar quantidade pendente. |
+| DELETE | `/pending-items/<bar_code>` | US07 resolver item pendente. |
 | POST | `/stores` | US06 cadastro admin de local. |
 | GET | `/stores` | US06 listagem autenticada de locais. |
 | GET | `/stores/nearest` | US06/GPS loja mais próxima. |
 | POST | `/prices` | US06 registro de preço observado. |
 | GET | `/products/<bar_code>/prices` | US06 consulta de preços do produto. |
+| POST | `/product-suggestions` | AD05 criação de sugestão de produto. |
+| GET | `/admin/product-suggestions` | AD05 listagem administrativa de sugestões pendentes. |
+| POST | `/admin/product-suggestions/<id>/approve` | AD05 aprovação administrativa de sugestão. |
+| POST | `/admin/product-suggestions/<id>/reject` | AD05 rejeição administrativa de sugestão. |
 
 ### HTML
 
@@ -173,6 +183,7 @@ Não foram localizadas implementações marcadas como US07 ou AD05.
 | GET | `/shopping-lists/<list_id>/view` | `shopping_list_detail.html`. |
 | POST | `/shopping-lists/<list_id>/items/view` | formulário HTML de item. |
 | GET | `/cart/view` | `cart.html`. |
+| GET | `/pending-items/view` | `pending_items.html`. |
 | POST | `/cart/view/items` | formulário de carrinho. |
 | POST | `/cart/view/items/<bar_code>/update` | atualização HTML de carrinho. |
 | POST | `/cart/view/items/<bar_code>/remove` | remoção HTML de carrinho. |
@@ -187,6 +198,8 @@ Não foram localizadas implementações marcadas como US07 ou AD05.
 | `ShoppingListItem` | `shopping_list_items` | `list_id`, `bar_code`, `quantity`. |
 | `Store` | `stores` | `id`, `name`, `address`, `observation`, `latitude`, `longitude`. |
 | `ProductPrice` | `product_prices` | `id`, `product_bar_code`, `store_id`, `user_id`, `price`, `created_at`. |
+| `PendingPurchaseItem` | `pending_purchase_items` | `user_id`, `bar_code`, `quantity`, `source_list_id`, `created_at`. |
+| `ProductSuggestion` | `product_suggestions` | `id`, `user_id`, `name`, `brand`, `price`, `bar_code`, `quantity`, `status`, `created_at`, `reviewed_at`, `reviewer_id`, `rejection_reason`. |
 
 ## Testes existentes
 
@@ -211,9 +224,7 @@ Foram localizados testes `unittest` em:
 
 ## IDs de estórias e requisitos encontrados
 
-Foram encontrados no código e testes: `US01`, `US02`, `US03`, `US04`, `US05`, `US06`, `AD01`, `AD02`, `AD03`, `AD04`, `RNF02`, além de marcadores auxiliares `WEB`, `DEMO` e `QA`.
-
-Não foram localizados `US07` nem `AD05`.
+Foram encontrados no código e testes: `US01`, `US02`, `US03`, `US04`, `US05`, `US06`, `US07`, `AD01`, `AD02`, `AD03`, `AD04`, `AD05`, `RNF02`, além de marcadores auxiliares `WEB`, `DEMO` e `QA`.
 
 ## Observações sobre aderência ao enunciado
 
@@ -232,4 +243,3 @@ Não foram localizados `US07` nem `AD05`.
 | Grupo 1 | Autenticação, usuários, sessão e perfis | Gabriel Balder; Anabel Mendes |
 | Grupo 2 | Catálogo, produtos, estoque e painel administrativo | Dionilton Oliveira Silva; Jhonny Rodrigues de Sousa |
 | Grupo 3 | Listas de compras, carrinho, preços, locais e total estimado | Gabriel Dylan; Gabriel Campello; Luiz Otávio |
-
