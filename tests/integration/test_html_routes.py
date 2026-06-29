@@ -349,6 +349,33 @@ class TestWEBHtmlRoutes(unittest.TestCase):
         self.assertIn("Loja mais próxima", html)
         self.assertIn("Mercado Próximo", html)
 
+    def test_us06_gps_web_user_sees_nearest_store_map(self):
+        """US06/GPS/WEB: usuário deve ver sua posição e a loja em um mapa."""
+        self.client.post(
+            "/stores",
+            json={
+                "name": "Mercado Próximo",
+                "address": "Asa Sul",
+                "latitude": -15.794,
+                "longitude": -47.883,
+            },
+        )
+        with self.client.session_transaction() as flask_session:
+            flask_session["role"] = "user"
+
+        response = self.client.get(
+            "/stores/nearest/view?latitude=-15.793889&longitude=-47.882778"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        html = response.get_data(as_text=True)
+        self.assertIn("leaflet", html)
+        self.assertIn('id="nearest-store-map"', html)
+        self.assertIn('data-user-latitude="-15.793889"', html)
+        self.assertIn('data-store-latitude="-15.794"', html)
+        self.assertIn("Sua localização", html)
+        self.assertIn("Loja mais próxima", html)
+
     def test_web_cart_page(self):
         """WEB: carrinho deve responder 200 e exibir itens da sessão."""
         self.client.post(
