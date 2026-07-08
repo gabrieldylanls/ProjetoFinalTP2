@@ -1,0 +1,12 @@
+Relatorio individual - Luiz Otavio
+Papel principal: desenvolvimento, documentacao, testes, cobertura, verificacao estatica e qualidade.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 1h30 | estudar aulas e laboratorios relacionados | Eu revisei testes automatizados, cobertura e verificacao estatica.
+2026-06-20 | 2h | redigir casos de teste | Eu apoiei testes de lista, carrinho, total estimado e precos por local.
+2026-06-22 | 1h30 | realizar os testes | Eu executei testes unitarios e de integracao durante a evolucao do MVP.
+2026-06-24 | 2h | codificar modulo | Eu trabalhei nos fluxos HTML de usuario, carrinho, lojas e precos.
+2026-06-25 | 1h30 | revisar casos de teste | Eu revisei testes da interface completa e carga de dados ficticios.
+2026-06-30 | 1h30 | revisar codigo do modulo | Eu revisei ajustes de GPS, mapa e exibicao da loja mais proxima.
+2026-07-03 | 2h | documentar com Doxygen ou ferramenta equivalente | Eu organizei relatorios de cobertura, depuracao, licencas e diagramas.
+2026-07-04 | 1h30 | Rodar o verificador estatico e retirar warnings | Eu conferi Ruff, coverage e documentacao pdoc antes do pacote final.

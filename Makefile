@@ -1,8 +1,9 @@
 PYTHON ?= python3
+DOXYGEN ?= doxygen
 TEST_PATTERN ?= test_*.py
 TEST_ENV ?= PYTHONDONTWRITEBYTECODE=1
 
-.PHONY: run seed test test-unit test-integration coverage lint format quality
+.PHONY: run seed test test-unit test-integration coverage lint format doxygen docs quality
 
 run:
 	$(PYTHON) run.py
@@ -29,5 +30,14 @@ lint:
 
 format:
 	$(PYTHON) -m ruff format .
+
+doxygen:
+	@command -v $(DOXYGEN) >/dev/null 2>&1 || { \
+		echo "Doxygen não encontrado. Instale o pacote 'doxygen' e rode novamente."; \
+		exit 1; \
+	}
+	$(DOXYGEN) Doxyfile
+
+docs: doxygen
 
 quality: test coverage lint

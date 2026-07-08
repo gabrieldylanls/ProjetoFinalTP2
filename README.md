@@ -24,7 +24,8 @@ Instale a aplicação e as ferramentas de desenvolvimento:
 python -m pip install -e ".[dev]"
 ```
 
-As dependências de desenvolvimento incluem `coverage` e `ruff`.
+As dependências de desenvolvimento incluem `coverage` e `ruff`. A documentação
+Doxygen depende também do programa `doxygen` instalado no sistema operacional.
 
 ## Execução
 
@@ -149,6 +150,29 @@ make quality
 
 O alvo `quality` executa testes, cobertura e análise estática.
 
+## Documentação Doxygen
+
+Gere a documentação técnica do backend e da estrutura de templates com:
+
+```bash
+make doxygen
+```
+
+Ou:
+
+```bash
+doxygen Doxyfile
+```
+
+A saída HTML fica em:
+
+```text
+docs_doxygen/html/index.html
+```
+
+O arquivo `Doxyfile` documenta o código Python em `app/` e páginas auxiliares
+em `docs/doxygen/`, incluindo uma visão de backend e frontend.
+
 ## Rastreabilidade
 
 Todo teste deve mencionar o ID da estória ou requisito no nome ou na docstring.
@@ -172,5 +196,6 @@ tests/
 Principais arquivos de qualidade:
 
 - `pyproject.toml`: dependências e configuração de coverage e Ruff.
-- `Makefile`: atalhos para testes, cobertura, lint e formatação.
+- `Doxyfile`: configuração da documentação Doxygen.
+- `Makefile`: atalhos para testes, cobertura, lint, formatação e documentação.
 - `README.md`: instalação, execução e convenções do projeto.
