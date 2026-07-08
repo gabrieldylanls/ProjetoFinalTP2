@@ -61,6 +61,18 @@ python run.py
 Abra `http://127.0.0.1:5000/` no navegador. A tela de login fica em
 `http://127.0.0.1:5000/login`.
 
+## Execução com Docker
+
+Suba a aplicação com banco SQLite persistido em volume:
+
+```bash
+docker compose up --build
+```
+
+O serviço usa `DATABASE_PATH=/data/shopping.db` e expõe a aplicação em
+`http://127.0.0.1:5000/`. O volume nomeado `shopping_data` preserva o banco
+entre reinicializações do container.
+
 Credenciais de demonstração:
 
 - Administrador: `admin@example.com` / `admin123`
@@ -69,6 +81,15 @@ Credenciais de demonstração:
 A população é idempotente: executá-la novamente não duplica usuários ou
 produtos fictícios. A carga inclui mais de 3.000 produtos e seis locais de
 compra, com preços observados distribuídos entre as lojas.
+
+## Funcionalidades adicionais
+
+- `US07`: itens não comprados podem ser movidos de uma lista de compras para a
+  lista de pendências do usuário, com consulta do menor preço observado quando
+  houver compartilhamento de preços.
+- `AD05`: usuários autenticados podem sugerir novos produtos; administradores
+  aprovam as sugestões para criar produtos no catálogo ou rejeitam com
+  justificativa.
 
 ## Testes
 

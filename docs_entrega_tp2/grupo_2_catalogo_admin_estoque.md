@@ -36,7 +36,7 @@ Este grupo representa o catálogo de produtos e as operações administrativas: 
 | RQ-G2-005 | AD03 | Administrador atualiza quantidade de estoque. | Quantidade válida retorna 200; negativa retorna 400; inexistente retorna 404. | `quantity.py`, `product_service.py`, `product_repository.py`, `routes.py` | `PATCH /products/<bar_code>/stock` | `test_product_service.py`, `test_product_repository.py`, `test_product_routes.py` | Implementado |
 | RQ-G2-006 | RNF02 | Rotas administrativas de produto exigem admin. | Visitante 401; usuário comum 403; admin permitido. | `authorization.py`, `routes.py` | `POST/PUT/DELETE/PATCH /products...` | `test_product_routes.py` | Implementado |
 | RQ-G2-007 | AD04 | Administrador consulta métricas simples. | Admin recebe totais; usuário comum 403; visitante 401. | `admin_metrics_service.py`, `admin_metrics_repository.py`, `admin_metrics_routes.py` | `GET /admin/metrics`, `GET /admin/dashboard` | `test_admin_metrics_*`, `test_html_routes.py` | Implementado |
-| RQ-G2-008 | AD05 | Funcionalidade administrativa adicional prevista na matriz geral. | Não há código, rota ou teste com marcador AD05. | Não localizado | Não localizado | Não localizado | Não localizado |
+| RQ-G2-008 | AD05 | Aprovar ou rejeitar produtos sugeridos por usuários. | Admin lista pendentes, aprova criando produto no catálogo ou rejeita com justificativa. | `product_suggestion_service.py`, `product_suggestion_repository.py`, `product_suggestion_routes.py`, `html_routes.py` | `/product-suggestions`, `/admin/product-suggestions` | `test_product_suggestion_routes.py` | Implementado |
 
 ## E. Descrição textual para Diagrama de Casos de Uso
 
@@ -262,5 +262,4 @@ stop
 | AD03 | RQ-G2-005 | UC-G2-005 | P4/D1 | `validate_quantity` | estoque | `product_service.py` | `PATCH /stock` | `test_product_routes.py` | Implementado | Negativo rejeitado. |
 | RNF02 | RQ-G2-006 | todos admin | P6 | `authorization` | autorização | `authorization.py` | `admin_required` | `test_product_routes.py` | Implementado | Web apenas. |
 | AD04 | RQ-G2-007 | UC-G2-006 | P5 | `AdminMetricsService` | métricas | `admin_metrics_repository.py` | `/admin/metrics` | `test_admin_metrics_routes.py` | Implementado | Métricas simples. |
-| AD05 | RQ-G2-008 | não localizado | não localizado | não localizado | não localizado | não localizado | não localizado | não localizado | Não localizado | Sem marcador AD05. |
-
+| AD05 | RQ-G2-008 | UC-G2-007 | P7 | `ProductSuggestion` | sugestão produto | `product_suggestion_service.py` | `/admin/product-suggestions` | `test_product_suggestion_routes.py` | Implementado | Aprovação cria produto ativo. |

@@ -67,17 +67,12 @@ A rastreabilidade foi construída em dois níveis:
 
 Foram localizados no código os marcadores:
 
-- `US01`, `US02`, `US03`, `US04`, `US05`, `US06`;
-- `AD01`, `AD02`, `AD03`, `AD04`;
+- `US01`, `US02`, `US03`, `US04`, `US05`, `US06`, `US07`;
+- `AD01`, `AD02`, `AD03`, `AD04`, `AD05`;
 - `RNF02`;
 - marcadores auxiliares `WEB`, `DEMO` e `QA`.
 
-Não foram localizados marcadores ou implementações para:
-
-- `US07`;
-- `AD05`.
-
-Esses itens foram registrados como “não localizado”, sem inventar funcionalidades.
+`US07` foi implementado como controle de itens não comprados/pendentes. `AD05` foi implementado como fluxo de sugestão de produtos por usuários e aprovação/rejeição por administrador.
 
 ## Limitações encontradas
 
@@ -87,7 +82,7 @@ Esses itens foram registrados como “não localizado”, sem inventar funcional
 - A autorização administrativa é implementada em decorators simples na camada web.
 - Não há paginação avançada nem filtros complexos no histórico de preços.
 - O mapa usa Leaflet com tiles externos do OpenStreetMap; para funcionar plenamente no navegador, depende de acesso à internet e permissão de geolocalização.
-- US07 e AD05 não foram encontrados no código ou nos testes.
+- A aprovação de produtos sugeridos cria o produto no catálogo, mas não implementa comparação automática de duplicidade por similaridade de nome/marca; a verificação efetiva é por código de barras.
 
 ## Observação sobre integrantes e implementação
 
@@ -101,9 +96,9 @@ Portanto, embora cada grupo tenha responsabilidade documental própria, alguns a
 
 ## Conclusão
 
-O projeto apresenta uma arquitetura simples e coerente com o escopo acadêmico: domínio, aplicação, infraestrutura SQLite e camada web Flask. A implementação cobre autenticação, autorização administrativa, catálogo, estoque, listas, carrinho, total estimado, locais de compra, preços compartilhados e mapa da loja mais próxima.
+O projeto apresenta uma arquitetura simples e coerente com o escopo acadêmico: domínio, aplicação, infraestrutura SQLite e camada web Flask. A implementação cobre autenticação, autorização administrativa, catálogo, estoque, listas, carrinho, total estimado, locais de compra, preços compartilhados, mapa da loja mais próxima, itens pendentes não comprados e aprovação administrativa de produtos sugeridos.
 
-A cobertura de testes é ampla e utiliza `unittest`, com testes unitários e de integração. A documentação gerada permite transformar os textos em diagramas UML/DFD por ferramentas como PlantUML, Mermaid, Draw.io ou Lucidchart. Os requisitos ausentes foram explicitamente marcados como não localizados, preservando a fidelidade à implementação real.
+A cobertura de testes é ampla e utiliza `unittest`, com testes unitários e de integração. A documentação gerada permite transformar os textos em diagramas UML/DFD por ferramentas como PlantUML, Mermaid, Draw.io ou Lucidchart. `US07` e `AD05` agora possuem implementação, rotas, templates e testes de integração dedicados.
 
 ## Arquivos desta entrega
 
@@ -114,4 +109,3 @@ A cobertura de testes é ampla e utiliza `unittest`, com testes unitários e de 
 - `docs_entrega_tp2/04_matriz_rastreabilidade_geral.md`
 - `docs_entrega_tp2/05_assertivas_gerais_por_funcao.md`
 - `docs_entrega_tp2/06_relatorio_final_para_entrega.md`
-

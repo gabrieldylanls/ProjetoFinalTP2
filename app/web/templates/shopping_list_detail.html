@@ -52,6 +52,7 @@
             <th>Produto</th>
             <th>Marca</th>
             <th>Quantidade</th>
+            <th>Não comprado</th>
           </tr>
         </thead>
         <tbody>
@@ -60,6 +61,27 @@
               <td>{{ product.name }}</td>
               <td>{{ product.brand }}</td>
               <td>{{ quantity }}</td>
+              <td>
+                <form
+                  class="inline-form"
+                  method="post"
+                  action="{{ url_for(
+                    'html.mark_pending_item_page',
+                    list_id=shopping_list.list_id,
+                    bar_code=product.bar_code
+                  ) }}"
+                >
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="1"
+                    max="{{ quantity }}"
+                    value="{{ quantity }}"
+                    required
+                  >
+                  <button type="submit">Marcar pendente</button>
+                </form>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

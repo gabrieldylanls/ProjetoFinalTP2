@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Sugestões de produtos | Compra Certa{% endblock %}
+
+{% block content %}
+  <h1>Sugestões de produtos</h1>
+  {% if suggestions %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Marca</th>
+            <th>Código</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for suggestion in suggestions %}
+            <tr>
+              <td>{{ suggestion.name }}</td>
+              <td>{{ suggestion.brand }}</td>
+              <td>{{ suggestion.bar_code }}</td>
+              <td>R$ {{ "%.2f"|format(suggestion.price) }}</td>
+              <td>{{ suggestion.quantity }}</td>
+              <td>
+                <form
+                  class="inline-form"
+                  method="post"
+                  action="{{ url_for(
+                    'html.approve_product_suggestion_page',
+                    suggestion_id=suggestion.suggestion_id
+                  ) }}"
+                >
+                  <button type="submit">Aprovar</button>
+                </form>
+                <form
+                  class="inline-form"
+                  method="post"
+                  action="{{ url_for(
+                    'html.reject_product_suggestion_page',
+                    suggestion_id=suggestion.suggestion_id
+                  ) }}"
+                >
+                  <input name="rejection_reason" placeholder="Justificativa">
+                  <button type="submit">Rejeitar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">Não há sugestões pendentes.</p>
+  {% endif %}
+{% endblock %}

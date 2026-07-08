@@ -59,3 +59,23 @@ class StoreNotFoundError(Exception):
 
 class InvalidProductPriceError(Exception):
     """Indica que um preço observado viola uma pré-condição."""
+
+
+class InvalidPendingPurchaseItemError(Exception):
+    """Indica que um item pendente viola uma pré-condição."""
+
+
+class PendingPurchaseItemNotFoundError(Exception):
+    """Indica que o item pendente solicitado não foi encontrado."""
+
+
+class InvalidProductSuggestionError(Exception):
+    """Indica que uma sugestão de produto viola uma pré-condição."""
+
+
+class ProductSuggestionNotFoundError(Exception):
+    """Indica que a sugestão de produto solicitada não foi encontrada."""
+
+
+class ProductSuggestionConflictError(Exception):
+    """Indica conflito entre sugestão de produto e catálogo."""

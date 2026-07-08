@@ -1,0 +1,12 @@
+.git
+.venv
+__pycache__/
+*.py[cod]
+.coverage
+.ruff_cache/
+htmlcov/
+*.egg-info/
+shopping.db
+TP2_*
+docs_entrega_tp2/
+tests/

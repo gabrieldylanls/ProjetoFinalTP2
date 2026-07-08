@@ -195,3 +195,21 @@ class SQLiteProductPriceRepository:
             """,
             (store_id, query, pattern, pattern),
         ).fetchone()[0]
+
+    def find_lowest_price_by_product(self, product_bar_code: str) -> tuple | None:
+        """US07: retorna o menor preço observado para um produto.
+
+        Pré-condição: product_bar_code deve identificar o produto consultado.
+        Pós-condição: retorna preço, local e data ou None quando não houver dado.
+        """
+        return self.connection.execute(
+            """
+            SELECT pp.price, pp.created_at, s.id, s.name
+            FROM product_prices AS pp
+            JOIN stores AS s ON s.id = pp.store_id
+            WHERE pp.product_bar_code = ?
+            ORDER BY pp.price ASC, pp.created_at DESC, pp.id DESC
+            LIMIT 1;
+            """,
+            (product_bar_code,),
+        ).fetchone()
