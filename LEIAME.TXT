@@ -1,0 +1,152 @@
+Sistema de Gerencia de Compras e Compartilhamento de Precos
+Tecnicas de Programacao 2 - Projeto Final
+
+1. Requisitos
+
+- Python 3.12 ou superior.
+- venv e pip.
+- Docker e Docker Compose, opcional, caso deseje rodar em container.
+- Doxygen, opcional, caso deseje gerar a documentacao tecnica.
+
+2. Instalar dependencias
+
+Na raiz do projeto, execute:
+
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+
+Observacao: se o comando "python" apontar para uma versao errada, use
+"python3" no lugar.
+
+3. Rodar localmente
+
+Na raiz do projeto:
+
+source .venv/bin/activate
+PYTHON=.venv/bin/python make seed
+PYTHON=.venv/bin/python make run
+
+A aplicacao ficara disponivel em:
+
+http://127.0.0.1:5000/
+
+Credenciais de demonstracao:
+
+Administrador:
+admin@example.com
+admin123
+
+Usuario comum:
+usuario@example.com
+usuario123
+
+4. Rodar com Docker
+
+Na raiz do projeto:
+
+docker compose up --build
+
+A aplicacao ficara disponivel em:
+
+http://127.0.0.1:5000/
+
+Para parar:
+
+docker compose down
+
+O Docker usa banco SQLite persistido no volume "shopping_data", no caminho
+interno /data/shopping.db.
+
+5. Rodar testes
+
+Com o ambiente virtual criado:
+
+PYTHON=.venv/bin/python make test
+
+Ou diretamente:
+
+.venv/bin/python -m unittest discover -s tests
+
+6. Rodar cobertura de testes
+
+Use:
+
+PYTHON=.venv/bin/python make coverage
+
+Ou diretamente:
+
+.venv/bin/python -m coverage erase
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m coverage run -m unittest discover -s tests
+.venv/bin/python -m coverage report --fail-under=80
+
+O projeto exige cobertura minima de 80%, configurada em pyproject.toml.
+
+Para gerar relatorio HTML de cobertura:
+
+.venv/bin/python -m coverage html
+
+Abra:
+
+htmlcov/index.html
+
+7. Rodar linter
+
+Use:
+
+PYTHON=.venv/bin/python make lint
+
+Ou:
+
+.venv/bin/python -m ruff check .
+
+8. Gerar documentacao Doxygen
+
+Com o Doxygen instalado no sistema:
+
+make doxygen
+
+A documentacao sera gerada em:
+
+docs_doxygen/html/index.html
+
+Para abrir:
+
+xdg-open docs_doxygen/html/index.html
+
+Caso o xdg-open nao funcione:
+
+python -m http.server 8000 -d docs_doxygen/html
+
+Depois acesse:
+
+http://127.0.0.1:8000/
+
+9. Arquivos e diretorios principais
+
+app/domain:
+Entidades e regras de validacao.
+
+app/application:
+Servicos e casos de uso.
+
+app/infrastructure:
+Repositorios SQLite, criacao de tabelas e carga de demonstracao.
+
+app/web:
+Aplicacao Flask, rotas JSON, rotas HTML, templates e autorizacao.
+
+tests:
+Testes unitarios e de integracao.
+
+docs_entrega_tp2:
+Documentacao da entrega, matriz de rastreabilidade, assertivas e relatorio.
+
+Doxyfile:
+Configuracao da documentacao Doxygen.
+
+Makefile:
+Atalhos para execucao, testes, cobertura, linter e documentacao.
+
+docker-compose.yml e Dockerfile:
+Arquivos para execucao em container.
