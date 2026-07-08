@@ -1,0 +1,12 @@
+Relatorio individual - Gabriel Campello
+Papel principal: desenvolvimento, arquitetura, testes, documentacao tecnica, cobertura e rastreabilidade.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 2h | projetar | Eu organizei a arquitetura em dominio, aplicacao, infraestrutura, web e testes.
+2026-06-20 | 2h30 | codificar modulo | Eu implementei servicos, repositorios SQLite e composicao da aplicacao Flask.
+2026-06-23 | 2h | redigir casos de teste | Eu escrevi e revisei testes unitarios e de integracao dos fluxos principais.
+2026-06-25 | 2h | codificar modulo | Eu trabalhei em templates HTML, dados de demonstracao e fluxos de usuario.
+2026-06-26 | 1h30 | Rodar o verificador estatico e retirar warnings | Eu padronizei a formatacao e conferi a configuracao do Ruff.
+2026-06-29 | 2h | codificar modulo | Eu implementei ajustes da loja mais proxima por GPS e mapa limitado.
+2026-07-02 | 2h | documentar com Doxygen ou ferramenta equivalente | Eu consolidei documentacao UML, DFD, assertivas e rastreabilidade.
+2026-07-04 | 3h | instrumentar verificando a cobertura | Eu ajustei a cobertura de ProductPrice e conferi os relatorios finais.

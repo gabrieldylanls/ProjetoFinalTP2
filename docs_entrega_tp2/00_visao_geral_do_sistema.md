@@ -40,7 +40,8 @@ Foram localizadas implementações para US07 e AD05.
 - `geopy` para cálculo geodésico da loja mais próxima.
 - Leaflet/OpenStreetMap no template HTML de mapa.
 - Coverage e Ruff para qualidade.
-- Makefile para execução de comandos.
+- Doxygen via `Doxyfile` para documentação técnica.
+- Makefile para execução de comandos, incluindo documentação.
 
 ## Estrutura real do projeto
 
@@ -234,6 +235,7 @@ Foram encontrados no código e testes: `US01`, `US02`, `US03`, `US04`, `US05`, `
 - A autorização administrativa é feita na camada web com decorators, preservando serviços sem dependência de sessão.
 - O domínio contém validações e exceções específicas.
 - O projeto possui rastreabilidade por docstrings e nomes de testes para grande parte das estórias.
+- O projeto possui `Doxyfile` para gerar documentação HTML de backend e visão de frontend.
 - Funcionalidades não localizadas foram documentadas como ausentes, sem inferência de implementação.
 
 ## Divisão em grupos funcionais

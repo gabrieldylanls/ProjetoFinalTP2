@@ -1,0 +1,12 @@
+Relatorio individual - Gabriel Balder
+Papel principal: Scrum Master, organizacao do processo, cronograma, Kanban e revisao de processo.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 1h30 | estudar aulas e laboratorios relacionados | Eu revisei os requisitos da disciplina e organizei os pontos formais da entrega.
+2026-06-20 | 2h | gerenciar a construcao do software | Eu acompanhei a divisao inicial das tarefas por grupo funcional.
+2026-06-22 | 1h30 | especificar os modulos | Eu organizei as tarefas de autenticacao, sessao e controle de acesso no planejamento.
+2026-06-24 | 2h | revisar especificacoes | Eu revisei criterios de aceite de cadastro, login, logout e acesso administrativo.
+2026-06-26 | 1h30 | gerenciar a construcao do software | Eu atualizei o cronograma de iteracoes e conferi pendencias por sprint.
+2026-06-30 | 2h | revisar projetos | Eu conferi a coerencia entre Kanban, backlog e matriz de rastreabilidade.
+2026-07-02 | 1h30 | revisar codigo do modulo | Eu revisei os pontos de autorizacao por perfil e bloqueio de usuario comum.
+2026-07-04 | 2h | gerenciar a construcao do software | Eu consolidei a revisao final de processo, cronograma e pacote de entrega.

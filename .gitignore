@@ -6,3 +6,5 @@ __pycache__/
 *.egg-info/
 htmlcov/
 shopping.db
+TP2_*
+docs_doxygen/

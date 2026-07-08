@@ -41,6 +41,13 @@ Os diagramas refletem a implementação real observada. Por exemplo:
 - o Grupo 2 mostra manutenção de produtos, estoque e métricas administrativas;
 - o Grupo 3 mostra listas, carrinho, total, locais, preços e busca da loja mais próxima por GPS.
 
+## Documentação Doxygen
+
+Foi adicionada configuração Doxygen no arquivo `Doxyfile`. A geração cobre o
+código Python em `app/` e páginas auxiliares em `docs/doxygen/`, incluindo visão
+de backend e frontend. A saída HTML é gerada em `docs_doxygen/html/index.html`
+ao executar `make doxygen`.
+
 ## Resumo das assertivas
 
 As assertivas foram organizadas em duas camadas:

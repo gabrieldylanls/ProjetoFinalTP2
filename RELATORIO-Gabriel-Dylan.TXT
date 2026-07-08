@@ -1,0 +1,12 @@
+Relatorio individual - Gabriel Dylan
+Papel principal: Dono do Produto, backlog, priorizacao, criterios de aceitacao e validacao de escopo.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 1h30 | especificar os modulos | Eu defini as estorias de listas, carrinho, total, locais e precos.
+2026-06-20 | 1h30 | revisar especificacoes | Eu priorizei US03, US04, US05 e US06 conforme valor para o usuario.
+2026-06-22 | 2h | redigir casos de teste | Eu defini criterios de aceite para lista, carrinho e total estimado.
+2026-06-24 | 1h30 | gerenciar a construcao do software | Eu acompanhei a evolucao das funcionalidades do Grupo 3.
+2026-06-26 | 2h | realizar os testes | Eu validei fluxos principais de lista, carrinho e loja pela interface.
+2026-06-29 | 2h | revisar especificacoes | Eu validei o escopo da busca de loja mais proxima por GPS e mapa.
+2026-07-01 | 1h30 | revisar projetos | Eu revisei a coerencia entre estorias, telas, rotas e testes.
+2026-07-04 | 2h | gerenciar a construcao do software | Eu consolidei backlog, status final e pendencias registradas da entrega.

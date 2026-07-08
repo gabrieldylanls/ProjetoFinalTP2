@@ -1,0 +1,12 @@
+Relatorio individual - Anabel Mendes
+Papel principal: desenvolvimento, autenticacao, testes, revisao de especificacoes e documentacao.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 1h30 | especificar as funcoes | Eu especifiquei as funcoes de cadastro, autenticacao e encerramento de sessao.
+2026-06-20 | 2h | codificar modulo | Eu trabalhei nas regras de usuario, validacao de e-mail e uso de senha com hash.
+2026-06-23 | 2h | redigir casos de teste | Eu escrevi testes para cadastro, login, credenciais invalidas e senha protegida.
+2026-06-25 | 1h30 | revisar casos de teste | Eu revisei testes de duplicidade de e-mail e retorno das rotas de autenticacao.
+2026-06-26 | 1h | revisar especificacoes | Eu ajustei criterios de aceite das telas de login e cadastro.
+2026-06-30 | 1h30 | realizar os testes | Eu executei os testes de autenticacao e conferi os resultados.
+2026-07-02 | 2h | revisar codigo do modulo | Eu revisei o fluxo de login administrativo e redirecionamento por perfil.
+2026-07-04 | 1h30 | documentar com Doxygen ou ferramenta equivalente | Eu revisei a documentacao de US01 e RNF02 nos documentos finais.

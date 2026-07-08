@@ -1,0 +1,12 @@
+Relatorio individual - Dionilton Oliveira Silva
+Papel principal: desenvolvimento de catalogo, produtos, estoque, testes e revisao.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 2h | especificar os modulos | Eu defini as responsabilidades de catalogo, produto e estoque.
+2026-06-20 | 2h30 | codificar modulo | Eu implementei regras de produto, repositorio SQLite e cadastro administrativo.
+2026-06-22 | 1h30 | redigir casos de teste | Eu escrevi testes de validacao de produto e cadastro por rota.
+2026-06-24 | 2h | codificar modulo | Eu trabalhei na busca textual por nome ou marca.
+2026-06-25 | 2h | codificar modulo | Eu implementei edicao, remocao logica e atualizacao de estoque.
+2026-06-29 | 1h30 | revisar codigo do modulo | Eu revisei duplicidade por codigo de barras e filtro de produtos ativos.
+2026-07-01 | 1h30 | realizar os testes | Eu executei testes de catalogo, estoque e rotas administrativas.
+2026-07-04 | 1h30 | instrumentar verificando a cobertura | Eu conferi a cobertura dos modulos de produto e estoque.

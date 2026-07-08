@@ -1,0 +1,12 @@
+Relatorio individual - Jhonny Rodrigues de Sousa
+Papel principal: desenvolvimento, diagramas, testes e revisao dos modulos administrativos.
+
+Data | Horas Trabalhadas | Tipo Tarefa | Descricao da Tarefa Realizada
+2026-06-19 | 1h30 | projetar | Eu apoiei o desenho da camada de catalogo, administracao e persistencia SQLite.
+2026-06-20 | 1h30 | fazer diagramas | Eu registrei casos de uso e fluxo de dados do catalogo administrativo.
+2026-06-23 | 2h | codificar modulo | Eu trabalhei nas rotas administrativas de produto.
+2026-06-24 | 1h30 | redigir casos de teste | Eu escrevi testes de busca parcial, edicao e remocao logica.
+2026-06-26 | 1h | revisar projetos | Eu revisei a separacao entre dominio, servico, repositorio e web.
+2026-06-30 | 1h30 | realizar os testes | Eu executei testes de catalogo e painel administrativo.
+2026-07-02 | 1h30 | revisar codigo do modulo | Eu revisei impactos das telas de loja e precos sobre o catalogo.
+2026-07-04 | 2h | documentar com Doxygen ou ferramenta equivalente | Eu consolidei diagramas e matriz de rastreabilidade do Grupo 2.
